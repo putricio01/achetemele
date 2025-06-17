@@ -1,0 +1,3980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Enhanced Cycle Tracker 2025</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Geist:wght@400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warm-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --analysis-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --customize-gradient: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --halo-glow: #ff6b9d;
+            
+            --font-display: 'Geist', 'Inter', system-ui, sans-serif;
+            --font-body: 'Inter', system-ui, sans-serif;
+            
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 1.875rem;
+        }
+
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--primary-gradient);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+
+        .loading-logo {
+            width: 60px;
+            height: 60px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .loading-logo svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        .loading-title {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .loading-subtitle {
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .loading-progress {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            border-radius: 2px;
+            width: 0%;
+            animation: loadingAnimation 2s ease-in-out;
+        }
+
+        @keyframes loadingAnimation {
+            to { width: 100%; }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes haloGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 8px var(--halo-glow)) drop-shadow(0 0 16px var(--halo-glow));
+                transform: scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 0 12px var(--halo-glow)) drop-shadow(0 0 24px var(--halo-glow)) drop-shadow(0 0 32px var(--halo-glow));
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes haloRing {
+            0% { 
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            50% { 
+                opacity: 0.6;
+                transform: scale(1.2);
+            }
+            100% { 
+                opacity: 0;
+                transform: scale(1.5);
+            }
+        }
+
+        @media (max-width: 480px) {
+            @keyframes haloGlow {
+                0%, 100% { 
+                    filter: drop-shadow(0 0 6px var(--halo-glow)) drop-shadow(0 0 12px var(--halo-glow));
+                    transform: scale(1);
+                }
+                50% { 
+                    filter: drop-shadow(0 0 8px var(--halo-glow)) drop-shadow(0 0 16px var(--halo-glow));
+                    transform: scale(1.03);
+                }
+            }
+
+            @keyframes haloRing {
+                0% { 
+                    opacity: 0;
+                    transform: scale(0.9);
+                }
+                50% { 
+                    opacity: 0.4;
+                    transform: scale(1.1);
+                }
+                100% { 
+                    opacity: 0;
+                    transform: scale(1.3);
+                }
+            }
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--primary-gradient);
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: pan-y;
+        }
+
+        .floating-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            touch-action: pan-y;
+        }
+
+        .main-content {
+            flex: 1;
+            touch-action: pan-y;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.3);
+        }
+
+        .header {
+            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--secondary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: var(--text-xl);
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-date {
+            font-family: var(--font-body);
+            font-size: var(--text-sm);
+            color: #ffffff;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 16px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .cycle-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            gap: 1.5rem;
+            margin: 1rem;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .nav-arrow {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 0.75rem;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-lg);
+            font-weight: 900;
+            color: #ffffff;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            touch-action: manipulation;
+        }
+
+        .nav-arrow:hover, .nav-arrow:active {
+            transform: translateY(-2px) scale(1.05);
+            background: rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .cycle-info {
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .cycle-title {
+            font-family: var(--font-display);
+            font-weight: 900;
+            color: #ffffff;
+            font-size: var(--text-lg);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 0.25rem;
+        }
+
+        .cycle-subtitle {
+            font-family: var(--font-body);
+            font-size: var(--text-sm);
+            color: #ffffff;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.25rem 0.6rem;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .controls-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 0 1rem;
+            touch-action: manipulation;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .analysis-button, .customize-button {
+            border: none;
+            border-radius: 16px;
+            padding: 0.875rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: var(--text-sm);
+            font-weight: 800;
+            color: #ffffff;
+            transition: all 0.2s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            font-family: var(--font-display);
+            animation: fadeInUp 0.6s ease 0.3s both;
+            touch-action: manipulation;
+        }
+
+        .analysis-button {
+            background: var(--analysis-gradient);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .customize-button {
+            background: var(--customize-gradient);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .analysis-button:hover, .analysis-button:active {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .customize-button:hover, .customize-button:active {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .analysis-icon, .customize-icon {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        .zoom-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 0;
+            gap: 1.5rem;
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        .zoom-btn, .pan-btn {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            padding: 0.6rem;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-lg);
+            font-weight: 900;
+            color: #ffffff;
+            transition: all 0.2s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            touch-action: manipulation;
+        }
+
+        .zoom-btn:hover, .zoom-btn:active, .pan-btn:hover, .pan-btn:active {
+            transform: translateY(-2px) scale(1.1);
+            background: rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .zoom-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .pan-btn.active {
+            background: var(--secondary-gradient);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(249, 115, 251, 0.4);
+        }
+
+        .zoom-level {
+            font-family: var(--font-body);
+            font-size: var(--text-sm);
+            color: #ffffff;
+            min-width: 3rem;
+            text-align: center;
+            font-weight: 800;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.4rem 0.8rem;
+            border-radius: 12px;
+        }
+
+        .visualization-container {
+            position: relative;
+            height: 320px;
+            overflow: hidden;
+            margin: 0 1rem;
+            border-radius: 20px;
+            animation: fadeInUp 0.6s ease 0.6s both;
+            cursor: grab;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .visualization-container:active {
+            cursor: grabbing;
+        }
+
+        .visualization-container.panning {
+            cursor: grabbing;
+        }
+
+        .svg-container {
+            position: absolute;
+            inset: 0;
+            margin: auto;
+            transition: transform 0.05s ease-out;
+            transform-origin: center center;
+            will-change: transform;
+            touch-action: manipulation;
+        }
+
+        .svg-container.smooth-zoom {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cycle-transition {
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            z-index: 10;
+            animation: slideUpScale 0.3s ease;
+        }
+
+        .hover-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 0.4rem;
+            z-index: 15;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(10px) scale(0.9);
+            transition: all 0.2s ease;
+            min-width: 120px;
+            max-width: 140px;
+        }
+
+        .hover-tooltip.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .hover-tooltip h4 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.3rem;
+            font-size: 0.75rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .hover-tooltip-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.15rem;
+            font-size: 0.6rem;
+        }
+
+        .hover-tooltip-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+        }
+
+        .hover-tooltip-value {
+            color: #ffffff;
+            font-weight: 700;
+            font-family: var(--font-body);
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.1rem 0.25rem;
+            border-radius: 3px;
+            font-size: 0.55rem;
+        }
+
+        @keyframes slideUpScale {
+            from { transform: translateY(100%) scale(0.8); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .tooltip h3 {
+            font-family: var(--font-display);
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            font-size: var(--text-base);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+        }
+
+        .tooltip-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: var(--text-sm);
+            font-weight: 600;
+        }
+
+        .tooltip-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .tooltip-value {
+            font-family: var(--font-body);
+            font-weight: 700;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            backdrop-filter: blur(10px);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            font-size: var(--text-xs);
+        }
+
+        .symptoms-section {
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 0.5rem;
+        }
+
+        .symptoms-label {
+            color: #ffffff;
+            font-size: var(--text-xs);
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .symptoms-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .symptom-tag {
+            background: var(--warm-gradient);
+            color: #ffffff;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            animation: popIn 0.2s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .selected-customization-day {
+            animation: selectedDayBlink 1s ease-in-out infinite;
+        }
+
+        @keyframes selectedDayBlink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .legend-container {
+            margin: 0 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.6s ease 0.8s both;
+            touch-action: pan-x pan-y;
+        }
+
+        .legend-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .legend-title {
+            font-family: var(--font-display);
+            font-weight: 900;
+            color: #ffffff;
+            font-size: var(--text-lg);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .legend-dots {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .legend-dot.active {
+            background: var(--secondary-gradient);
+            transform: scale(1.3);
+        }
+
+        .legend-dot.inactive {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .legend-dot:hover, .legend-dot:active {
+            transform: scale(1.2);
+        }
+
+        .legend-content {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            touch-action: pan-x pan-y;
+        }
+
+        .legend-slider {
+            display: flex;
+            transition: transform 0.2s ease;
+        }
+
+        .legend-page {
+            width: 100%;
+            flex-shrink: 0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .legend-item:hover, .legend-item:active {
+            transform: translateY(-1px) scale(1.02);
+            background: rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .legend-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.02);
+        }
+
+        .legend-icon {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .legend-label {
+            font-size: var(--text-sm);
+            color: #ffffff;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin: 0 1rem 2rem 1rem;
+            animation: fadeInUp 0.6s ease 1s both;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 1.2rem 0.8rem;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(31, 38, 135, 0.3);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+        }
+
+        .stat-card:hover, .stat-card:active {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(31, 38, 135, 0.4);
+        }
+
+        .stat-card.active {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .stat-value {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+            line-height: 1.1;
+        }
+
+        .stat-value.pink { 
+            color: #ff6b9d;
+            text-shadow: 0 0 8px rgba(255, 107, 157, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .stat-value.blue { 
+            color: #5bc0de;
+            text-shadow: 0 0 8px rgba(91, 192, 222, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .stat-value.purple { 
+            color: #9b59b6;
+            text-shadow: 0 0 8px rgba(155, 89, 182, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .stat-label {
+            font-size: var(--text-xs);
+            color: #ffffff;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 0.2rem;
+            line-height: 1.2;
+        }
+
+        .day-marker {
+            cursor: pointer;
+            transition: transform 0.08s ease-out;
+            touch-action: manipulation;
+            will-change: transform;
+        }
+
+        .day-circle {
+            transition: transform 0.08s ease-out;
+            will-change: transform;
+        }
+
+        .day-text {
+            transition: all 0.05s ease-out;
+            font-weight: 900;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+            stroke: rgba(0, 0, 0, 0.5);
+            stroke-width: 0.5px;
+            paint-order: stroke fill;
+        }
+
+        .day-marker.current-day {
+            animation: haloGlow 2s ease-in-out infinite;
+            will-change: transform, filter;
+        }
+
+        .day-marker.current-day .halo-ring {
+            animation: haloRing 2s ease-in-out infinite;
+            will-change: transform, opacity;
+        }
+
+        .highlighted-day {
+            animation: glow 1s ease-in-out infinite alternate;
+            will-change: filter;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5)); }
+            to { filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8)); }
+        }
+
+        .phase-label {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+            font-weight: 800;
+            stroke: rgba(0, 0, 0, 0.5);
+            stroke-width: 1px;
+            paint-order: stroke fill;
+            touch-action: manipulation;
+        }
+
+        .phase-label:hover, .phase-label:active {
+            fill: #ffffff;
+            font-size: 15px;
+        }
+
+        .phase-label.active {
+            fill: #ffffff;
+            font-size: 15px;
+        }
+
+        .customize-modal, .analysis-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+            padding: 1rem;
+            touch-action: auto;
+        }
+
+        .customize-modal-content, .analysis-modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 0;
+            max-width: 380px;
+            width: 100%;
+            max-height: 85vh;
+            overflow: hidden;
+            position: relative;
+            animation: scaleInBounce 0.4s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            touch-action: auto;
+        }
+
+        @keyframes scaleInBounce {
+            from { transform: scale(0.3); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes phaseTooltipIn {
+            from { 
+                transform: translate(-50%, -50%) scale(0.3); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translate(-50%, -50%) scale(1); 
+                opacity: 1; 
+            }
+        }
+
+        .phase-tooltip.animating {
+            animation: phaseTooltipIn 0.4s ease;
+        }
+
+        .customize-header, .analysis-header {
+            background: var(--customize-gradient);
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .analysis-header {
+            background: var(--analysis-gradient);
+        }
+
+        .customize-header h2, .analysis-header h2 {
+            font-family: var(--font-display);
+            font-size: var(--text-xl);
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 0.4rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .customize-subtitle, .analysis-subtitle {
+            font-family: var(--font-body);
+            font-size: var(--text-sm);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .customize-close, .analysis-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-lg);
+            cursor: pointer;
+            color: #ffffff;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 900;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            z-index: 3;
+            touch-action: manipulation;
+        }
+
+        .customize-close:hover, .customize-close:active,
+        .analysis-close:hover, .analysis-close:active {
+            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.7);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .customize-body, .analysis-body {
+            padding: 0;
+            max-height: 55vh;
+            overflow-y: auto;
+            touch-action: pan-y;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .customize-section {
+            margin-bottom: 1.5rem;
+            padding: 0 1.5rem;
+        }
+
+        .customize-section h4 {
+            font-family: var(--font-display);
+            font-size: var(--text-base);
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: var(--text-sm);
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.6rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: var(--text-sm);
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.4rem;
+            margin-top: 0.4rem;
+        }
+
+        .symptom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem;
+            background: rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .symptom-checkbox:hover, .symptom-checkbox:active {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .symptom-checkbox input {
+            margin: 0;
+        }
+
+        .symptom-checkbox label {
+            font-size: var(--text-xs);
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .save-button {
+            width: calc(100% - 3rem);
+            margin: 0 1.5rem 1.5rem;
+            background: var(--customize-gradient);
+            border: none;
+            border-radius: 12px;
+            padding: 0.875rem;
+            color: #ffffff;
+            font-size: var(--text-sm);
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            font-family: var(--font-display);
+            touch-action: manipulation;
+        }
+
+        .save-button:hover, .save-button:active {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .day-selector {
+            margin-bottom: 1.5rem;
+        }
+
+        .day-picker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.4rem;
+            margin-top: 0.4rem;
+        }
+
+        .day-option {
+            aspect-ratio: 1;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: var(--text-sm);
+            font-weight: 700;
+            color: #ffffff;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            touch-action: manipulation;
+        }
+
+        .day-option:hover, .day-option:active {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .day-option.selected {
+            background: var(--secondary-gradient);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        .analysis-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .analysis-tab {
+            flex: 1;
+            padding: 0.875rem;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            font-size: var(--text-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            font-family: var(--font-body);
+            touch-action: manipulation;
+        }
+
+        .analysis-tab.active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .analysis-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--secondary-gradient);
+        }
+
+        .analysis-tab:hover, .analysis-tab:active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .analysis-tab-content {
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .analysis-tab-content.active {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .analysis-insight {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .analysis-insight h4 {
+            font-family: var(--font-display);
+            font-size: var(--text-base);
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .analysis-insight p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+        }
+
+        .analysis-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin: 0.75rem 0;
+        }
+
+        .analysis-metric {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .analysis-metric-value {
+            font-family: var(--font-display);
+            font-size: var(--text-lg);
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 0.4rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .analysis-metric-label {
+            font-size: var(--text-xs);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .analysis-chart {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin: 0.75rem 0;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+
+        .recommendation-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendation-list li {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 0.6rem;
+            color: #ffffff;
+            font-weight: 500;
+            position: relative;
+            padding-left: 2.5rem;
+        }
+
+        .recommendation-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent-gradient);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.7rem;
+        }
+
+        .phase-tooltip {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 1rem;
+            z-index: 20;
+            max-width: 240px;
+            width: 85%;
+        }
+
+        .modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 15;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-backdrop.visible {
+            opacity: 1;
+        }
+
+        .close-phase {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-sm);
+            cursor: pointer;
+            color: #ffffff;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 900;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            touch-action: manipulation;
+        }
+
+        .close-phase:hover, .close-phase:active {
+            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .phase-tooltip h4 {
+            font-family: var(--font-display);
+            color: #ffffff;
+            font-size: var(--text-sm);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .phase-tooltip p {
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            font-size: var(--text-xs);
+        }
+
+        .phase-days {
+            display: flex;
+            gap: 0.2rem;
+            margin: 0.5rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .phase-day {
+            background: var(--warm-gradient);
+            color: #ffffff;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            animation: popIn 0.2s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
+            touch-action: auto;
+        }
+
+        .detail-modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 360px;
+            width: 90%;
+            max-height: 75vh;
+            overflow-y: auto;
+            position: relative;
+            animation: scaleIn 0.3s ease;
+            touch-action: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .detail-modal h3 {
+            font-family: var(--font-display);
+            color: #ffffff;
+            font-size: var(--text-xl);
+            font-weight: 900;
+            margin-bottom: 1.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .detail-modal p {
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .detail-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-lg);
+            cursor: pointer;
+            color: #ffffff;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 900;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            touch-action: manipulation;
+        }
+
+        .detail-close:hover, .detail-close:active {
+            transform: scale(1.1);
+            background: rgba(0, 0, 0, 0.7);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 1.5rem 1rem 1rem;
+            animation: fadeInUp 0.6s ease 1.2s both;
+            touch-action: manipulation;
+        }
+
+        .footer-content {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 1.2rem;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .footer-text {
+            font-family: var(--font-body);
+            font-size: var(--text-sm);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0.4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 0.75rem;
+        }
+
+        .footer-link {
+            font-family: var(--font-body);
+            font-size: var(--text-xs);
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .footer-link:hover, .footer-link:active {
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        svg text {
+            font-family: var(--font-display);
+            font-weight: 800;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        @media (max-width: 480px) {
+            ::-webkit-scrollbar {
+                display: none;
+            }
+            
+            * {
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+            
+            .header {
+                border-radius: 0;
+                padding: 1rem;
+            }
+            
+            .cycle-navigation, .legend-container, .visualization-container {
+                margin: 0.5rem;
+                border-radius: 16px;
+            }
+            
+            .stats-grid {
+                margin: 0 0.5rem 1rem 0.5rem;
+                gap: 0.6rem;
+            }
+
+            .header-title {
+                font-size: var(--text-lg);
+            }
+
+            .cycle-title, .legend-title {
+                font-size: var(--text-base);
+            }
+
+            .tooltip h3 {
+                font-size: var(--text-sm);
+                margin-bottom: 0.4rem;
+                padding: 0.25rem 0.5rem;
+            }
+
+            .tooltip {
+                bottom: 0.75rem;
+                left: 0.75rem;
+                right: 0.75rem;
+                padding: 0.75rem;
+            }
+
+            .tooltip-row {
+                font-size: var(--text-xs);
+                margin-bottom: 0.3rem;
+            }
+
+            .tooltip-value {
+                font-size: 0.65rem;
+                padding: 0.15rem 0.4rem;
+            }
+
+            .symptoms-label {
+                font-size: 0.65rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .symptom-tag {
+                font-size: 0.6rem;
+                padding: 0.15rem 0.4rem;
+            }
+
+            .stat-value {
+                font-size: var(--text-xl);
+            }
+
+            .stat-label {
+                font-size: 0.65rem;
+                padding: 0.25rem 0.5rem;
+            }
+
+            .stat-card {
+                padding: 1rem 0.6rem;
+                min-height: 85px;
+            }
+
+            .footer {
+                padding: 1rem 0.5rem 0.5rem;
+            }
+
+            .footer-content {
+                padding: 1rem;
+            }
+
+            .footer-links {
+                gap: 1rem;
+            }
+
+            .detail-modal-content {
+                width: 95%;
+                padding: 1.2rem;
+            }
+
+            .detail-modal h3 {
+                font-size: var(--text-lg);
+            }
+
+            .analysis-button, .customize-button {
+                padding: 0.75rem 1.2rem;
+                font-size: var(--text-xs);
+            }
+
+            .button-row {
+                flex-direction: column;
+                gap: 0.6rem;
+            }
+
+            .analysis-modal-content, .customize-modal-content {
+                width: 95%;
+                max-height: 80vh;
+            }
+
+            .analysis-header, .customize-header {
+                padding: 1.2rem;
+            }
+
+            .analysis-header h2, .customize-header h2 {
+                font-size: var(--text-lg);
+            }
+
+            .analysis-tab-content, .customize-section {
+                padding: 1.2rem;
+            }
+
+            .analysis-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .controls-section {
+                margin: 0 0.5rem;
+            }
+
+            .phase-tooltip {
+                max-width: 200px;
+                padding: 0.8rem;
+            }
+
+            .phase-tooltip h4 {
+                font-size: 0.75rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .phase-tooltip p {
+                font-size: 0.65rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .hover-tooltip {
+                min-width: 100px;
+                max-width: 120px;
+                padding: 0.3rem;
+            }
+
+            .hover-tooltip h4 {
+                font-size: 0.7rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .hover-tooltip-row {
+                font-size: 0.55rem;
+                margin-bottom: 0.1rem;
+            }
+
+            .hover-tooltip-value {
+                font-size: 0.5rem;
+                padding: 0.05rem 0.2rem;
+            }
+
+            .zoom-controls {
+                gap: 1rem;
+            }
+
+            /* Mobile Performance Optimizations */
+            .day-marker {
+                transition: transform 0.05s ease-out;
+                will-change: transform;
+            }
+
+            .day-circle {
+                transition: transform 0.05s ease-out;
+                filter: none;
+            }
+
+            .day-text {
+                transition: none;
+                text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+            }
+
+            .day-marker.current-day {
+                animation: haloGlow 2s ease-in-out infinite;
+                will-change: transform, filter;
+            }
+
+            .day-marker.current-day .halo-ring {
+                animation: haloRing 2s ease-in-out infinite;
+                will-change: transform, opacity;
+            }
+
+            .highlighted-day {
+                animation: glow 1s ease-in-out infinite alternate;
+                will-change: filter;
+            }
+
+            .svg-container {
+                transition: transform 0.02s ease-out;
+            }
+
+            .visualization-container {
+                transform: translateZ(0);
+                -webkit-transform: translateZ(0);
+            }
+
+            /* Keep temperature path simple on mobile */
+            .temperature-path {
+                filter: none;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-gradient);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gradient);
+        }
+
+        .gpu-accelerated {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        .will-change-transform {
+            will-change: transform;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+            </div>
+            <h1 class="loading-title">Cycle Tracker</h1>
+            <p class="loading-subtitle">Visualizing your health journey</p>
+            <div class="loading-progress">
+                <div class="loading-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-particles" id="particles"></div>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="header glass-card">
+                <div class="header-content">
+                    <div class="header-left">
+                        <div class="header-icon">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                        </div>
+                        <h1 class="header-title">Cycle Tracker</h1>
+                    </div>
+                    <div class="header-date">Day <span id="currentDay">13</span> of 28</div>
+                </div>
+            </div>
+
+            <div class="cycle-navigation glass-card">
+                <button class="nav-arrow" id="prevCycle">‹</button>
+                <div class="cycle-info">
+                    <div class="cycle-title" id="cycleTitle">Current Cycle</div>
+                    <div class="cycle-subtitle" id="cycleDate">Jan 2025</div>
+                </div>
+                <button class="nav-arrow" id="nextCycle">›</button>
+            </div>
+
+            <div class="controls-section">
+                <div class="button-row">
+                    <button class="analysis-button" id="analysisButton">
+                        <svg class="analysis-icon" viewBox="0 0 24 24">
+                            <path d="M3 3v18h18"/>
+                            <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
+                            <circle cx="12" cy="8" r="2"/>
+                            <circle cx="8" cy="16" r="2"/>
+                            <circle cx="18" cy="12" r="2"/>
+                        </svg>
+                        Smart Analysis
+                    </button>
+
+                    <button class="customize-button" id="customizeButton">
+                        <svg class="customize-icon" viewBox="0 0 24 24">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        Customize Day
+                    </button>
+                </div>
+
+                <div class="zoom-controls">
+                    <button class="zoom-btn" id="zoomOut">−</button>
+                    <span class="zoom-level" id="zoomLevel">100%</span>
+                    <button class="zoom-btn" id="zoomIn">+</button>
+                    <button class="pan-btn" id="panToggle">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path d="M12,2A2,2 0 0,1 14,4V8H16L12,12L8,8H10V4A2,2 0 0,1 12,2Z"/>
+                            <path d="M22,12A2,2 0 0,1 20,14H16V16L12,12L16,8V10H20A2,2 0 0,1 22,12Z"/>
+                            <path d="M12,22A2,2 0 0,1 10,20V16H8L12,12L16,16H14V20A2,2 0 0,1 12,22Z"/>
+                            <path d="M2,12A2,2 0 0,1 4,10H8V8L12,12L8,16V14H4A2,2 0 0,1 2,12Z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="visualization-container glass-card" id="visualizationContainer">
+                <svg width="280" height="280" viewBox="0 0 280 280" class="svg-container cycle-transition gpu-accelerated" id="cycleSvg">
+                    <defs>
+                        <linearGradient id="circleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgba(255,255,255,0.15);stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge> 
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                        <filter id="haloGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                        <radialGradient id="haloGradient" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:#ff6b9d;stop-opacity:0.6" />
+                            <stop offset="50%" style="stop-color:#ff6b9d;stop-opacity:0.3" />
+                            <stop offset="100%" style="stop-color:#ff6b9d;stop-opacity:0" />
+                        </radialGradient>
+                    </defs>
+                    
+                    <circle cx="140" cy="140" r="95" fill="none" stroke="url(#circleGradient)" stroke-width="2" stroke-dasharray="6,3" opacity="0.7"/>
+                    
+                    <text x="140" y="25" text-anchor="middle" fill="white" font-size="12" font-weight="800" 
+                          class="phase-label" id="ovulationLabel">Ovulation</text>
+                    <text x="140" y="265" text-anchor="middle" fill="white" font-size="12" font-weight="800" 
+                          class="phase-label" id="menstruationLabel">Menstruation</text>
+                    
+                    <path id="temperaturePath" fill="rgba(79, 172, 254, 0.1)" stroke="#4facfe" stroke-width="2" filter="url(#glow)"/>
+                    
+                    <g id="dayMarkers"></g>
+                </svg>
+
+                <div class="tooltip" id="tooltip" style="display: none;">
+                    <h3 id="tooltipTitle">Day 1</h3>
+                    <div id="tooltipContent"></div>
+                </div>
+
+                <div class="hover-tooltip" id="hoverTooltip">
+                    <h4 id="hoverTooltipTitle">Day 1</h4>
+                    <div id="hoverTooltipContent"></div>
+                </div>
+
+                <div class="modal-backdrop" id="phaseBackdrop" style="display: none;"></div>
+                <div class="phase-tooltip" id="phaseTooltip" style="display: none;">
+                    <button class="close-phase" id="closePhase">×</button>
+                    <h4 id="phaseTooltipTitle">🥚 Ovulation Phase</h4>
+                    <p id="phaseTooltipContent">The fertile window where the egg is released from the ovary. This is the best time for conception.</p>
+                    
+                    <div class="phase-days" id="phaseDays">
+                        <span class="phase-day">Day 12</span>
+                        <span class="phase-day">Day 13</span>
+                        <span class="phase-day">Day 14</span>
+                        <span class="phase-day">Day 15</span>
+                        <span class="phase-day">Day 16</span>
+                    </div>
+                    
+                    <p id="phaseExtraInfo"><strong>Signs:</strong> Increased cervical mucus, slight temperature rise, ovulation pain.</p>
+                </div>
+            </div>
+
+            <div class="legend-container glass-card">
+                <div class="legend-header">
+                    <h3 class="legend-title" id="legendTitle">Flow Intensity</h3>
+                    <div class="legend-dots" id="legendDots"></div>
+                </div>
+                
+                <div class="legend-content" id="legendContent">
+                    <div class="legend-slider" id="legendSlider"></div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card" data-stat="ovulation">
+                    <div class="stat-value pink" id="ovulationDays">1</div>
+                    <div class="stat-label">Days to Ovulation</div>
+                </div>
+                <div class="stat-card" data-stat="temperature">
+                    <div class="stat-value blue" id="currentTemp">98.2°</div>
+                    <div class="stat-label">Today's Temp</div>
+                </div>
+                <div class="stat-card" data-stat="cycle">
+                    <div class="stat-value purple">28</div>
+                    <div class="stat-label">Cycle Length</div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p class="footer-text">Track your health journey with confidence</p>
+                <div class="footer-links">
+                    <a class="footer-link" data-link="privacy">Privacy</a>
+                    <a class="footer-link" data-link="terms">Terms</a>
+                    <a class="footer-link" data-link="support">Support</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="customize-modal" id="customizeModal" style="display: none;">
+        <div class="customize-modal-content">
+            <div class="customize-header">
+                <button class="customize-close" id="customizeClose">×</button>
+                <h2>Customize Day <span id="customizeDayNumber">13</span></h2>
+                <p class="customize-subtitle">Personalize your daily health data</p>
+            </div>
+            
+            <div class="customize-body">
+                <div class="customize-section day-selector">
+                    <h4>Select Day</h4>
+                    <div class="day-picker" id="dayPicker"></div>
+                </div>
+
+                <div class="customize-section">
+                    <h4>Basic Information</h4>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="temperature">Temperature (°F)</label>
+                        <input type="number" id="temperature" class="form-input" step="0.1" min="95" max="102" placeholder="98.6">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="flowIntensity">Flow Intensity</label>
+                        <select id="flowIntensity" class="form-select">
+                            <option value="none">None</option>
+                            <option value="light">Light</option>
+                            <option value="medium">Medium</option>
+                            <option value="heavy">Heavy</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="mood">Mood</label>
+                        <select id="mood" class="form-select">
+                            <option value="great">Great</option>
+                            <option value="good">Good</option>
+                            <option value="low">Low</option>
+                            <option value="irritable">Irritable</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="energy">Energy Level</label>
+                        <select id="energy" class="form-select">
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="customize-section">
+                    <h4>Symptoms</h4>
+                    <div class="symptoms-grid" id="symptomsGrid">
+                        <div class="symptom-checkbox">
+                            <input type="checkbox" id="cramps" value="cramps">
+                            <label for="cramps">Cramps</label>
+                        </div>
+                        <div class="symptom-checkbox">
+                            <input type="checkbox" id="fatigue" value="fatigue">
+                            <label for="fatigue">Fatigue</label>
+                        </div>
+                        <div class="symptom-checkbox">
+                            <input type="checkbox" id="headache" value="headache">
+                            <label for="headache">Headache</label>
+                        </div>
+                        <div class="symptom-checkbox">
+                            <input type="checkbox" id="bloating" value="bloating">
+                            <label for="bloating">Bloating</label>
+                        </div>
+                        <div class="symptom-checkbox">
+                            <input type="checkbox" id="tender-breasts" value="tender breasts">
+                            <label for="tender-breasts">Tender Breasts</label>
+                        </div>
+                        <div class="symptom-checkbox">
+                            <input type="checkbox" id="mood-swings" value="mood swings">
+                            <label for="mood-swings">Mood Swings</label>
+                        </div>
+                        <div class="symptom-checkbox">
+                            <input type="checkbox" id="cervical-mucus" value="cervical mucus">
+                            <label for="cervical-mucus">Cervical Mucus</label>
+                        </div>
+                        <div class="symptom-checkbox">
+                            <input type="checkbox" id="ovulation-pain" value="ovulation pain">
+                            <label for="ovulation-pain">Ovulation Pain</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="save-button" id="saveCustomization">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="analysis-modal" id="analysisModal" style="display: none;">
+        <div class="analysis-modal-content">
+            <div class="analysis-header">
+                <button class="analysis-close" id="analysisClose">×</button>
+                <h2>Smart Analysis</h2>
+                <p class="analysis-subtitle">Comprehensive health insights powered by AI</p>
+            </div>
+            
+            <div class="analysis-body">
+                <div class="analysis-tabs" id="analysisTabs">
+                    <button class="analysis-tab active" data-tab="insights">Insights</button>
+                    <button class="analysis-tab" data-tab="patterns">Patterns</button>
+                    <button class="analysis-tab" data-tab="predictions">Predictions</button>
+                    <button class="analysis-tab" data-tab="recommendations">Tips</button>
+                </div>
+
+                <div class="analysis-tab-content active" id="insights">
+                    <div class="analysis-insight">
+                        <h4>🎯 Cycle Health Score</h4>
+                        <div class="analysis-metrics">
+                            <div class="analysis-metric">
+                                <div class="analysis-metric-value" id="healthScore">8.5/10</div>
+                                <div class="analysis-metric-label">Overall Health</div>
+                            </div>
+                            <div class="analysis-metric">
+                                <div class="analysis-metric-value" id="regularityScore">92%</div>
+                                <div class="analysis-metric-label">Regularity</div>
+                            </div>
+                        </div>
+                        <p id="cycleHealthText">Your cycle shows excellent regularity with consistent patterns. Temperature trends indicate healthy ovulation.</p>
+                    </div>
+
+                    <div class="analysis-insight">
+                        <h4>📊 Current Phase Analysis</h4>
+                        <p id="currentPhaseText">You're currently in the luteal phase (Day 13 of 28). Your basal body temperature shows the expected post-ovulation rise, indicating successful ovulation occurred around Day 14.</p>
+                        <div class="analysis-chart">
+                            Temperature trend visualization would appear here
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-tab-content" id="patterns">
+                    <div class="analysis-insight">
+                        <h4>🔄 Cycle Patterns</h4>
+                        <div class="analysis-metrics">
+                            <div class="analysis-metric">
+                                <div class="analysis-metric-value" id="avgLength">28.2</div>
+                                <div class="analysis-metric-label">Avg Length</div>
+                            </div>
+                            <div class="analysis-metric">
+                                <div class="analysis-metric-value" id="flowDays">5.1</div>
+                                <div class="analysis-metric-label">Flow Days</div>
+                            </div>
+                        </div>
+                        <p id="patternsText">Your cycles are remarkably consistent, varying by only ±1 day over the last 6 months. This indicates excellent hormonal balance.</p>
+                    </div>
+
+                    <div class="analysis-insight">
+                        <h4>🌡️ Temperature Insights</h4>
+                        <p id="temperatureInsights">Your temperature pattern shows clear biphasic trends with distinct pre and post-ovulation phases. Average pre-ovulation: 97.3°F, post-ovulation: 98.1°F.</p>
+                        <div class="analysis-chart">
+                            Biphasic temperature pattern chart
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-tab-content" id="predictions">
+                    <div class="analysis-insight">
+                        <h4>🔮 Next Cycle Predictions</h4>
+                        <div class="analysis-metrics">
+                            <div class="analysis-metric">
+                                <div class="analysis-metric-value" id="nextPeriod">Feb 15</div>
+                                <div class="analysis-metric-label">Next Period</div>
+                            </div>
+                            <div class="analysis-metric">
+                                <div class="analysis-metric-value" id="predictionConfidence">95%</div>
+                                <div class="analysis-metric-label">Confidence</div>
+                            </div>
+                        </div>
+                        <p id="predictionsText">Based on your consistent 28-day pattern, your next period is predicted for February 15th with high confidence.</p>
+                    </div>
+
+                    <div class="analysis-insight">
+                        <h4>🥚 Fertility Window</h4>
+                        <p id="fertilityText">Your most fertile days next cycle will likely be February 27th - March 3rd, with peak fertility on March 1st.</p>
+                        <div class="analysis-chart">
+                            Fertility probability calendar
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-tab-content" id="recommendations">
+                    <div class="analysis-insight">
+                        <h4>💡 Personalized Recommendations</h4>
+                        <ul class="recommendation-list" id="recommendationsList">
+                            <li>Continue consistent temperature tracking for optimal prediction accuracy</li>
+                            <li>Consider tracking cervical mucus to enhance fertility awareness</li>
+                            <li>Your cycle length is ideal - maintain current lifestyle habits</li>
+                            <li>Schedule health checkups during the follicular phase (Days 5-10) for best accuracy</li>
+                            <li>Monitor stress levels during luteal phase to minimize PMS symptoms</li>
+                            <li>Your data shows excellent health patterns - keep up the great work!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentAnimationFrame = null;
+        let hoverTimeout = null;
+        const RENDER_THROTTLE = 16;
+
+        function optimizedRaf(callback) {
+            if (currentAnimationFrame) {
+                cancelAnimationFrame(currentAnimationFrame);
+            }
+            currentAnimationFrame = requestAnimationFrame(callback);
+        }
+
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = window.innerWidth <= 480 ? 3 : 8;
+            
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                fragment.appendChild(particle);
+            }
+            particlesContainer.appendChild(fragment);
+        }
+
+        function hideLoadingScreen() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 2000);
+        }
+
+        class OptimizedCycleTracker {
+            constructor() {
+                this.isMobile = window.innerWidth <= 480;
+                this.preventVisualizationScroll = this.preventVisualizationScroll.bind(this);
+                this.initializeState();
+                this.cacheDOMElements();
+                this.bindEvents();
+                this.render();
+                
+                if (!this.isMobile) {
+                    setTimeout(() => this.startDemoAnimation(), 1000);
+                }
+            }
+
+            initializeState() {
+                this.isMobile = window.innerWidth <= 480;
+                this.zoomLevel = 1.0;
+                this.minZoom = 0.8;
+                this.maxZoom = 3.0;
+                this.panX = 0;
+                this.panY = 0;
+                this.isPanMode = false;
+                this.isDragging = false;
+                this.selectedDay = null;
+                this.customizeSelectedDay = 13;
+                this.legendIndex = 0;
+                this.currentCycleIndex = 1;
+                this.phaseActive = false;
+                this.currentPhase = null;
+                this.ovulationDays = [12, 13, 14, 15, 16];
+                this.menstruationDays = [1, 2, 3, 4, 5];
+                this.activeStatCard = null;
+                this.activeLegendFilter = null;
+                this.activeAnalysisTab = 'insights';
+                this.customizeModalVisible = false;
+                this.currentActiveDay = 13;
+                this.hoverTooltipVisible = false;
+                
+                this.touchStartX = null;
+                this.touchStartY = null;
+                this.touchStartTime = null;
+                this.initialDistance = null;
+                this.initialZoom = 1.0;
+                this.isAnimating = false;
+                this.lastPanX = 0;
+                this.lastPanY = 0;
+                
+                this.lastTapTime = 0;
+                this.doubleTapThreshold = 300;
+                this.isDoubleTapZoomed = false;
+                this.doubleTapZoomLevel = 2.0;
+                this.clickTimeout = null;
+
+                this.cycles = this.generateMultipleCycles();
+                this.legendCategories = this.initLegendCategories();
+            }
+
+            cacheDOMElements() {
+                this.el = {
+                    zoomIn: document.getElementById('zoomIn'),
+                    zoomOut: document.getElementById('zoomOut'),
+                    panToggle: document.getElementById('panToggle'),
+                    zoomLevel: document.getElementById('zoomLevel'),
+                    cycleSvg: document.getElementById('cycleSvg'),
+                    dayMarkers: document.getElementById('dayMarkers'),
+                    temperaturePath: document.getElementById('temperaturePath'),
+                    tooltip: document.getElementById('tooltip'),
+                    tooltipTitle: document.getElementById('tooltipTitle'),
+                    tooltipContent: document.getElementById('tooltipContent'),
+                    hoverTooltip: document.getElementById('hoverTooltip'),
+                    hoverTooltipTitle: document.getElementById('hoverTooltipTitle'),
+                    hoverTooltipContent: document.getElementById('hoverTooltipContent'),
+                    legendTitle: document.getElementById('legendTitle'),
+                    legendDots: document.getElementById('legendDots'),
+                    legendSlider: document.getElementById('legendSlider'),
+                    visualizationContainer: document.getElementById('visualizationContainer'),
+                    ovulationLabel: document.getElementById('ovulationLabel'),
+                    menstruationLabel: document.getElementById('menstruationLabel'),
+                    phaseTooltip: document.getElementById('phaseTooltip'),
+                    phaseBackdrop: document.getElementById('phaseBackdrop'),
+                    closePhase: document.getElementById('closePhase'),
+                    phaseTooltipTitle: document.getElementById('phaseTooltipTitle'),
+                    phaseTooltipContent: document.getElementById('phaseTooltipContent'),
+                    phaseDays: document.getElementById('phaseDays'),
+                    phaseExtraInfo: document.getElementById('phaseExtraInfo'),
+                    prevCycle: document.getElementById('prevCycle'),
+                    nextCycle: document.getElementById('nextCycle'),
+                    cycleTitle: document.getElementById('cycleTitle'),
+                    cycleDate: document.getElementById('cycleDate'),
+                    currentDay: document.getElementById('currentDay'),
+                    ovulationDays: document.getElementById('ovulationDays'),
+                    currentTemp: document.getElementById('currentTemp'),
+                    analysisButton: document.getElementById('analysisButton'),
+                    analysisModal: document.getElementById('analysisModal'),
+                    analysisClose: document.getElementById('analysisClose'),
+                    analysisTabs: document.getElementById('analysisTabs'),
+                    customizeButton: document.getElementById('customizeButton'),
+                    customizeModal: document.getElementById('customizeModal'),
+                    customizeClose: document.getElementById('customizeClose'),
+                    customizeDayNumber: document.getElementById('customizeDayNumber'),
+                    saveCustomization: document.getElementById('saveCustomization'),
+                    dayPicker: document.getElementById('dayPicker')
+                };
+            }
+
+            startDemoAnimation() {
+                if (this.isMobile) return;
+                
+                setInterval(() => {
+                    if (!this.isAnimating) {
+                        this.animateTemperatureChange();
+                    }
+                }, 10000);
+            }
+
+            animateTemperatureChange() {
+                const currentData = this.getCurrentCycleData();
+                let hasChanges = false;
+                
+                currentData.forEach((day, index) => {
+                    const oldTemp = day.temperature;
+                    day.temperature += (Math.random() - 0.5) * 0.03;
+                    day.temperature = Math.max(97, Math.min(99.5, day.temperature));
+                    if (Math.abs(oldTemp - day.temperature) > 0.01) {
+                        hasChanges = true;
+                    }
+                });
+                
+                if (hasChanges) {
+                    optimizedRaf(() => {
+                        this.renderTemperaturePath();
+                        this.updateStatCards();
+                    });
+                }
+            }
+
+            generateMultipleCycles() {
+                const cycles = [];
+                const months = ['Dec 2024', 'Jan 2025', 'Feb 2025'];
+                
+                for (let cycleIndex = 0; cycleIndex < 3; cycleIndex++) {
+                    cycles.push({
+                        id: cycleIndex,
+                        title: cycleIndex === 1 ? 'Current Cycle' : cycleIndex === 0 ? 'Previous Cycle' : 'Next Cycle',
+                        date: months[cycleIndex],
+                        data: Array.from({ length: 28 }, (_, i) => ({
+                            day: i + 1,
+                            temperature: 97.0 + Math.random() * 2.5 + (i > 14 ? 0.5 : 0) + (cycleIndex * 0.1),
+                            symptoms: this.generateSymptoms(i + 1, cycleIndex),
+                            flow: this.getFlowIntensity(i + 1),
+                            mood: this.getMood(i + 1, cycleIndex),
+                            energy: this.getEnergy(i + 1)
+                        }))
+                    });
+                }
+                
+                return cycles;
+            }
+
+            generateSymptoms(day, cycleIndex) {
+                const symptoms = [];
+                if (day <= 5) symptoms.push('cramps', 'fatigue');
+                if (day >= 12 && day <= 16) symptoms.push('cervical mucus', 'ovulation pain');
+                if (day >= 20) symptoms.push('bloating', 'mood swings', 'tender breasts');
+                if (cycleIndex === 0 && day <= 3) symptoms.push('headache');
+                return symptoms;
+            }
+
+            getFlowIntensity(day) {
+                if (day <= 2) return 'heavy';
+                if (day <= 5) return 'medium';
+                if (day <= 7) return 'light';
+                return 'none';
+            }
+
+            getMood(day, cycleIndex) {
+                if (day <= 5) return 'low';
+                if (day <= 14) return 'good';
+                if (day <= 21) return 'great';
+                return cycleIndex === 1 ? 'irritable' : 'good';
+            }
+
+            getEnergy(day) {
+                if (day <= 5) return 'low';
+                if (day <= 14) return 'high';
+                if (day <= 21) return 'medium';
+                return 'low';
+            }
+
+            initLegendCategories() {
+                return [
+                    {
+                        title: 'Flow Intensity',
+                        items: [
+                            { color: 'linear-gradient(135deg, #dc2626, #b91c1c)', label: 'Heavy', filter: 'heavy' },
+                            { color: 'linear-gradient(135deg, #ea580c, #dc2626)', label: 'Medium', filter: 'medium' },
+                            { color: 'linear-gradient(135deg, #f59e0b, #ea580c)', label: 'Light', filter: 'light' },
+                            { color: 'linear-gradient(135deg, #6b7280, #9ca3af)', label: 'None', filter: 'none' }
+                        ]
+                    },
+                    {
+                        title: 'Temperature',
+                        items: [
+                            { color: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', label: '< 97.5°F', filter: 'low-temp' },
+                            { color: 'linear-gradient(135deg, #10b981, #059669)', label: '97.5-98°F', filter: 'normal-temp' },
+                            { color: 'linear-gradient(135deg, #f59e0b, #d97706)', label: '98-98.5°F', filter: 'elevated-temp' },
+                            { color: 'linear-gradient(135deg, #ef4444, #dc2626)', label: '> 98.5°F', filter: 'high-temp' }
+                        ]
+                    },
+                    {
+                        title: 'Mood & Energy',
+                        items: [
+                            { color: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', label: 'Great Mood', filter: 'great-mood' },
+                            { color: 'linear-gradient(135deg, #06b6d4, #0891b2)', label: 'Good Mood', filter: 'good-mood' },
+                            { color: 'linear-gradient(135deg, #84cc16, #65a30d)', label: 'High Energy', filter: 'high-energy' },
+                            { color: 'linear-gradient(135deg, #f97316, #ea580c)', label: 'Low Energy', filter: 'low-energy' }
+                        ]
+                    }
+                ];
+            }
+
+            bindEvents() {
+                this.el.zoomIn.addEventListener('click', () => this.zoomIn());
+                this.el.zoomOut.addEventListener('click', () => this.zoomOut());
+                this.el.panToggle.addEventListener('click', () => this.togglePanMode());
+                
+                this.el.legendDots.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('legend-dot')) {
+                        const index = Array.from(e.target.parentNode.children).indexOf(e.target);
+                        this.legendIndex = index;
+                        this.updateLegend();
+                    }
+                });
+                
+                this.el.prevCycle.addEventListener('click', () => this.switchCycle(-1));
+                this.el.nextCycle.addEventListener('click', () => this.switchCycle(1));
+
+                this.el.analysisButton.addEventListener('click', () => this.showAnalysisModal());
+                this.el.analysisClose.addEventListener('click', () => this.hideAnalysisModal());
+
+                this.el.customizeButton.addEventListener('click', () => this.showCustomizeModal());
+                this.el.customizeClose.addEventListener('click', () => this.hideCustomizeModal());
+                this.el.saveCustomization.addEventListener('click', () => this.saveCustomization());
+
+                this.el.analysisTabs.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('analysis-tab')) {
+                        this.switchAnalysisTab(e.target.dataset.tab);
+                    }
+                });
+
+                this.el.visualizationContainer.addEventListener('wheel', (e) => {
+                    if (this.isPanMode) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return;
+                    }
+                    
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        this.handleWheel(e);
+                    }
+                }, { passive: false });
+
+                this.bindMouseEvents();
+                this.bindTouchEvents();
+                this.bindGlobalEvents();
+            }
+
+            bindMouseEvents() {
+                this.el.visualizationContainer.addEventListener('mousedown', (e) => this.handleMouseDown(e));
+                this.el.visualizationContainer.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+                this.el.visualizationContainer.addEventListener('mouseup', (e) => this.handleMouseUp(e));
+                this.el.visualizationContainer.addEventListener('mouseleave', (e) => this.handleMouseUp(e));
+                this.el.visualizationContainer.addEventListener('dblclick', (e) => this.handleDoubleClick(e));
+            }
+
+            bindTouchEvents() {
+                this.el.visualizationContainer.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
+                this.el.visualizationContainer.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+                this.el.visualizationContainer.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+            }
+
+            bindGlobalEvents() {
+                document.addEventListener('click', (e) => this.handleClickOutside(e));
+
+                this.el.ovulationLabel.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.togglePhaseInfo('ovulation');
+                });
+
+                this.el.menstruationLabel.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.togglePhaseInfo('menstruation');
+                });
+
+                this.el.closePhase.addEventListener('click', () => this.hidePhaseInfo());
+                this.el.phaseBackdrop.addEventListener('click', () => this.hidePhaseInfo());
+
+                document.querySelectorAll('.stat-card').forEach(card => {
+                    card.addEventListener('click', (e) => this.handleStatCardClick(e));
+                });
+
+                document.querySelectorAll('.footer-link').forEach(link => {
+                    link.addEventListener('click', (e) => this.handleFooterLinkClick(e));
+                });
+
+                const legendContent = document.getElementById('legendContent');
+                this.bindSwipeEvents(legendContent);
+
+                document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+            }
+
+            bindSwipeEvents(element) {
+                let startX = 0;
+                let startY = 0;
+                let isHorizontalSwipe = false;
+                
+                element.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    isHorizontalSwipe = false;
+                }, { passive: true });
+                
+                element.addEventListener('touchmove', (e) => {
+                    if (!startX || !startY) return;
+                    
+                    const currentX = e.touches[0].clientX;
+                    const currentY = e.touches[0].clientY;
+                    const diffX = Math.abs(startX - currentX);
+                    const diffY = Math.abs(startY - currentY);
+                    
+                    if (diffX > diffY && diffX > 10) {
+                        isHorizontalSwipe = true;
+                    }
+                }, { passive: true });
+                
+                element.addEventListener('touchend', (e) => {
+                    if (!isHorizontalSwipe) {
+                        startX = 0;
+                        startY = 0;
+                        return;
+                    }
+                    
+                    const endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) this.swipeLeft();
+                        else this.swipeRight();
+                    }
+                    
+                    startX = 0;
+                    startY = 0;
+                    isHorizontalSwipe = false;
+                });
+            }
+
+            handleKeyDown(e) {
+                if (e.key === 'Escape') {
+                    if (this.el.analysisModal.style.display !== 'none') {
+                        this.hideAnalysisModal();
+                    }
+                    if (this.el.customizeModal.style.display !== 'none') {
+                        this.hideCustomizeModal();
+                    }
+                    if (this.phaseActive) {
+                        this.hidePhaseInfo();
+                    }
+                    if (this.isPanMode) {
+                        this.togglePanMode();
+                    }
+                }
+                
+                if (e.key === '+' || e.key === '=') {
+                    e.preventDefault();
+                    this.zoomIn();
+                }
+                if (e.key === '-' || e.key === '_') {
+                    e.preventDefault();
+                    this.zoomOut();
+                }
+                if (e.key === '0') {
+                    e.preventDefault();
+                    this.zoomLevel = 1.0;
+                    this.panX = 0;
+                    this.panY = 0;
+                    this.isDoubleTapZoomed = false;
+                    if (this.isPanMode) {
+                        this.togglePanMode();
+                    }
+                    this.updateZoom();
+                }
+            }
+
+            togglePanMode() {
+                this.isPanMode = !this.isPanMode;
+                this.el.panToggle.classList.toggle('active', this.isPanMode);
+                this.el.visualizationContainer.style.cursor = this.isPanMode ? 'grab' : '';
+                
+                if (this.isPanMode) {
+                    this.el.visualizationContainer.style.touchAction = 'none';
+                    this.el.visualizationContainer.style.overflow = 'hidden';
+                    this.el.visualizationContainer.addEventListener('touchmove', this.preventVisualizationScroll, { passive: false });
+                    this.el.visualizationContainer.addEventListener('wheel', this.preventVisualizationScroll, { passive: false });
+                } else {
+                    this.el.visualizationContainer.style.touchAction = 'pan-y pinch-zoom';
+                    this.el.visualizationContainer.style.overflow = 'hidden';
+                    this.el.visualizationContainer.removeEventListener('touchmove', this.preventVisualizationScroll);
+                    this.el.visualizationContainer.removeEventListener('wheel', this.preventVisualizationScroll);
+                }
+            }
+
+            preventVisualizationScroll(e) {
+                if (!e.ctrlKey && !e.metaKey) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }
+
+            handleMouseDown(e) {
+                if (this.isPanMode && this.zoomLevel > 1) {
+                    this.isDragging = true;
+                    this.lastPanX = e.clientX;
+                    this.lastPanY = e.clientY;
+                    this.el.visualizationContainer.classList.add('panning');
+                    e.preventDefault();
+                }
+            }
+
+            handleMouseMove(e) {
+                if (this.isDragging && this.isPanMode) {
+                    const deltaX = e.clientX - this.lastPanX;
+                    const deltaY = e.clientY - this.lastPanY;
+                    
+                    this.panX += deltaX;
+                    this.panY += deltaY;
+                    
+                    this.constrainPan();
+                    this.updateTransform();
+                    
+                    this.lastPanX = e.clientX;
+                    this.lastPanY = e.clientY;
+                }
+            }
+
+            handleMouseUp(e) {
+                if (this.isDragging) {
+                    this.isDragging = false;
+                    this.el.visualizationContainer.classList.remove('panning');
+                }
+            }
+
+            constrainPan() {
+                const containerRect = this.el.visualizationContainer.getBoundingClientRect();
+                const svgRect = this.el.cycleSvg.getBoundingClientRect();
+                
+                const maxPanX = Math.max(0, (svgRect.width * this.zoomLevel - containerRect.width) / 2);
+                const maxPanY = Math.max(0, (svgRect.height * this.zoomLevel - containerRect.height) / 2);
+                
+                this.panX = Math.max(-maxPanX, Math.min(maxPanX, this.panX));
+                this.panY = Math.max(-maxPanY, Math.min(maxPanY, this.panY));
+            }
+
+            updateTransform() {
+                const transform = `scale(${this.zoomLevel}) translate(${this.panX / this.zoomLevel}px, ${this.panY / this.zoomLevel}px)`;
+                
+                if (this.isMobile) {
+                    this.el.cycleSvg.style.transform = transform;
+                } else {
+                    requestAnimationFrame(() => {
+                        this.el.cycleSvg.style.transform = transform;
+                    });
+                }
+            }
+
+            createDayPicker() {
+                this.el.dayPicker.innerHTML = '';
+                const fragment = document.createDocumentFragment();
+                
+                for (let day = 1; day <= 28; day++) {
+                    const dayOption = document.createElement('div');
+                    dayOption.className = 'day-option';
+                    dayOption.textContent = day;
+                    dayOption.dataset.day = day;
+                    
+                    if (day === this.customizeSelectedDay) {
+                        dayOption.classList.add('selected');
+                    }
+                    
+                    dayOption.addEventListener('click', () => {
+                        document.querySelectorAll('.day-option').forEach(opt => opt.classList.remove('selected'));
+                        dayOption.classList.add('selected');
+                        this.customizeSelectedDay = day;
+                        this.el.customizeDayNumber.textContent = day;
+                        this.populateCustomizeForm();
+                        this.updateSelectedDayBlinking();
+                    });
+                    
+                    fragment.appendChild(dayOption);
+                }
+                
+                this.el.dayPicker.appendChild(fragment);
+            }
+
+            updateSelectedDayBlinking() {
+                document.querySelectorAll('.selected-customization-day').forEach(el => {
+                    el.classList.remove('selected-customization-day');
+                });
+                
+                if (this.customizeModalVisible) {
+                    const selectedMarker = this.el.dayMarkers.querySelector(`g[data-day="${this.customizeSelectedDay}"]`);
+                    if (selectedMarker) {
+                        selectedMarker.classList.add('selected-customization-day');
+                    }
+                }
+            }
+
+            showCustomizeModal() {
+                this.customizeModalVisible = true;
+                this.customizeSelectedDay = this.currentActiveDay;
+                this.el.customizeDayNumber.textContent = this.customizeSelectedDay;
+                this.createDayPicker();
+                this.populateCustomizeForm();
+                this.updateSelectedDayBlinking();
+                this.el.customizeModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+
+            hideCustomizeModal() {
+                this.customizeModalVisible = false;
+                document.querySelectorAll('.selected-customization-day').forEach(el => {
+                    el.classList.remove('selected-customization-day');
+                });
+                this.el.customizeModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+
+            populateCustomizeForm() {
+                if (!this.customizeSelectedDay) return;
+                
+                const cycleData = this.getCurrentCycleData();
+                const dayData = cycleData[this.customizeSelectedDay - 1];
+                
+                document.getElementById('temperature').value = dayData.temperature.toFixed(1);
+                document.getElementById('flowIntensity').value = dayData.flow;
+                document.getElementById('mood').value = dayData.mood;
+                document.getElementById('energy').value = dayData.energy;
+                
+                document.querySelectorAll('#symptomsGrid input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = dayData.symptoms.includes(checkbox.value);
+                });
+            }
+
+            saveCustomization() {
+                if (!this.customizeSelectedDay) return;
+                
+                const cycleData = this.getCurrentCycleData();
+                const dayData = cycleData[this.customizeSelectedDay - 1];
+                
+                const temperature = parseFloat(document.getElementById('temperature').value);
+                if (!isNaN(temperature) && temperature >= 95 && temperature <= 102) {
+                    dayData.temperature = temperature;
+                }
+                
+                dayData.flow = document.getElementById('flowIntensity').value;
+                dayData.mood = document.getElementById('mood').value;
+                dayData.energy = document.getElementById('energy').value;
+                
+                const selectedSymptoms = [];
+                document.querySelectorAll('#symptomsGrid input[type="checkbox"]:checked').forEach(checkbox => {
+                    selectedSymptoms.push(checkbox.value);
+                });
+                dayData.symptoms = selectedSymptoms;
+                
+                this.currentActiveDay = this.customizeSelectedDay;
+                this.el.currentDay.textContent = this.currentActiveDay;
+                
+                optimizedRaf(() => {
+                    this.renderCurrentCycle();
+                    this.updateStatCards();
+                    this.updateAnalysisData();
+                });
+                
+                this.hideCustomizeModal();
+                
+                this.selectedDay = this.customizeSelectedDay;
+                this.showTooltip(this.customizeSelectedDay);
+            }
+
+            updateAnalysisData() {
+                const currentData = this.getCurrentCycleData();
+                const currentDayData = currentData[this.currentActiveDay - 1];
+                
+                document.getElementById('healthScore').textContent = '8.5/10';
+                document.getElementById('regularityScore').textContent = '92%';
+                
+                const cycleHealthText = `Your cycle shows excellent regularity with consistent patterns. Current day ${this.currentActiveDay} shows ${currentDayData.mood} mood and ${currentDayData.energy} energy levels.`;
+                document.getElementById('cycleHealthText').textContent = cycleHealthText;
+                
+                const currentPhaseText = `You're currently on Day ${this.currentActiveDay} of 28. Temperature: ${currentDayData.temperature.toFixed(1)}°F, Flow: ${currentDayData.flow}, ${currentDayData.symptoms.length} symptoms tracked.`;
+                document.getElementById('currentPhaseText').textContent = currentPhaseText;
+            }
+
+            showAnalysisModal() {
+                this.updateAnalysisData();
+                this.el.analysisModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+
+            hideAnalysisModal() {
+                this.el.analysisModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+
+            switchAnalysisTab(tabName) {
+                this.activeAnalysisTab = tabName;
+                
+                document.querySelectorAll('.analysis-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelectorAll('.analysis-tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                document.getElementById(tabName).classList.add('active');
+            }
+
+            handleStatCardClick(e) {
+                const card = e.currentTarget;
+                const statType = card.dataset.stat;
+                
+                if (this.activeStatCard === card) {
+                    this.activeStatCard.classList.remove('active');
+                    this.activeStatCard = null;
+                    this.clearStatHighlight();
+                } else {
+                    if (this.activeStatCard) {
+                        this.activeStatCard.classList.remove('active');
+                    }
+                    this.activeStatCard = card;
+                    card.classList.add('active');
+                    this.highlightStatData(statType);
+                }
+                
+                this.showStatModal(statType);
+            }
+
+            showStatModal(statType) {
+                const currentCycle = this.cycles[this.currentCycleIndex];
+                let content = '';
+                
+                switch(statType) {
+                    case 'ovulation':
+                        content = `
+                            <h3>🥚 Ovulation Tracking</h3>
+                            <p><strong>Current Cycle:</strong> ${currentCycle.title}</p>
+                            <p><strong>Current Day:</strong> Day ${this.currentActiveDay}</p>
+                            <p><strong>Predicted Ovulation:</strong> Day 14 (${currentCycle.date})</p>
+                            <p><strong>Fertile Window:</strong> Days 12-16</p>
+                            <p><strong>Next Ovulation:</strong> In ${Math.max(0, 14 - this.currentActiveDay)} days</p>
+                            <p>Ovulation typically occurs around day 14 of a 28-day cycle. Track your symptoms and temperature for more accurate predictions.</p>
+                        `;
+                        break;
+                    case 'temperature':
+                        const currentTemp = currentCycle.data[this.currentActiveDay - 1].temperature;
+                        const avgTemp = (currentCycle.data.reduce((sum, day) => sum + day.temperature, 0) / 28).toFixed(1);
+                        content = `
+                            <h3>🌡️ Temperature Analysis</h3>
+                            <p><strong>Current Temperature (Day ${this.currentActiveDay}):</strong> ${currentTemp.toFixed(1)}°F</p>
+                            <p><strong>Average This Cycle:</strong> ${avgTemp}°F</p>
+                            <p><strong>Status:</strong> ${currentTemp > 98 ? 'Elevated (Post-Ovulation)' : 'Normal (Pre-Ovulation)'}</p>
+                            <p>Basal body temperature typically rises 0.5-1°F after ovulation and stays elevated until menstruation.</p>
+                        `;
+                        break;
+                    case 'cycle':
+                        content = `
+                            <h3>📅 Cycle Length Analysis</h3>
+                            <p><strong>Current Day:</strong> Day ${this.currentActiveDay} of 28</p>
+                            <p><strong>Current Cycle Length:</strong> 28 days</p>
+                            <p><strong>Average Length:</strong> 28 days</p>
+                            <p><strong>Variation:</strong> ±2 days</p>
+                            <p><strong>Next Period:</strong> Expected in ${28 - this.currentActiveDay} days</p>
+                            <p>A normal menstrual cycle ranges from 21-35 days. Tracking helps identify your personal pattern.</p>
+                        `;
+                        break;
+                }
+                
+                this.showModal(content);
+            }
+
+            handleFooterLinkClick(e) {
+                e.preventDefault();
+                const linkType = e.target.dataset.link;
+                let content = '';
+                
+                switch(linkType) {
+                    case 'privacy':
+                        content = `
+                            <h3>🔒 Privacy Policy</h3>
+                            <p><strong>Data Protection:</strong> Your health data is stored locally on your device and never shared with third parties.</p>
+                            <p><strong>Encryption:</strong> All sensitive information is encrypted using industry-standard protocols.</p>
+                            <p><strong>No Tracking:</strong> We don't use cookies or tracking pixels to monitor your behavior.</p>
+                            <p><strong>Data Control:</strong> You can export or delete your data at any time from the settings menu.</p>
+                            <p>Last updated: January 2025</p>
+                        `;
+                        break;
+                    case 'terms':
+                        content = `
+                            <h3>📋 Terms of Service</h3>
+                            <p><strong>Medical Disclaimer:</strong> This app is for informational purposes only and should not replace professional medical advice.</p>
+                            <p><strong>Accuracy:</strong> While we strive for accuracy, predictions are estimates based on general patterns.</p>
+                            <p><strong>Usage:</strong> By using this app, you agree to use it responsibly and not for commercial purposes.</p>
+                            <p><strong>Updates:</strong> Terms may be updated periodically. Continued use constitutes acceptance of new terms.</p>
+                            <p>Last updated: January 2025</p>
+                        `;
+                        break;
+                    case 'support':
+                        content = `
+                            <h3>💬 Support Center</h3>
+                            <p><strong>Help Documentation:</strong> Visit our online help center for detailed guides and tutorials.</p>
+                            <p><strong>Contact Support:</strong> Email us at support@cycletracker.com for technical assistance.</p>
+                            <p><strong>Community:</strong> Join our user community forum for tips and shared experiences.</p>
+                            <p><strong>Feedback:</strong> We value your feedback! Use the in-app feedback feature to suggest improvements.</p>
+                            <p><strong>Response Time:</strong> We typically respond to support requests within 24 hours.</p>
+                        `;
+                        break;
+                }
+                
+                this.showModal(content);
+            }
+
+            showModal(content) {
+                const modal = document.createElement('div');
+                modal.className = 'detail-modal';
+                modal.innerHTML = `
+                    <div class="detail-modal-content">
+                        <button class="detail-close">×</button>
+                        ${content}
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                const closeBtn = modal.querySelector('.detail-close');
+                const closeModal = () => {
+                    modal.remove();
+                };
+                
+                closeBtn.addEventListener('click', closeModal);
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeModal();
+                });
+                
+                document.addEventListener('keydown', function escapeHandler(e) {
+                    if (e.key === 'Escape') {
+                        closeModal();
+                        document.removeEventListener('keydown', escapeHandler);
+                    }
+                });
+            }
+
+            highlightStatData(statType) {
+                this.clearStatHighlight();
+                
+                const dayMarkers = this.el.dayMarkers.querySelectorAll('g[data-day]');
+                const currentData = this.getCurrentCycleData();
+                
+                dayMarkers.forEach((marker, index) => {
+                    const dayData = currentData[index];
+                    let shouldHighlight = false;
+                    
+                    switch(statType) {
+                        case 'ovulation':
+                            shouldHighlight = this.ovulationDays.includes(dayData.day);
+                            break;
+                        case 'temperature':
+                            shouldHighlight = dayData.temperature > 98;
+                            break;
+                        case 'cycle':
+                            shouldHighlight = dayData.day <= 5 || dayData.day >= 25;
+                            break;
+                    }
+                    
+                    if (shouldHighlight) {
+                        marker.classList.add('highlighted-day');
+                    }
+                });
+            }
+
+            clearStatHighlight() {
+                const highlightedDays = this.el.dayMarkers.querySelectorAll('.highlighted-day');
+                highlightedDays.forEach(marker => {
+                    marker.classList.remove('highlighted-day');
+                });
+            }
+
+            switchCycle(direction) {
+                if (this.isAnimating) return;
+                
+                const newIndex = this.currentCycleIndex + direction;
+                if (newIndex >= 0 && newIndex < this.cycles.length) {
+                    this.isAnimating = true;
+                    this.el.cycleSvg.style.opacity = '0';
+                    this.el.cycleSvg.style.transform = `scale(${this.zoomLevel}) translateX(${direction * 20}px)`;
+                    
+                    setTimeout(() => {
+                        this.currentCycleIndex = newIndex;
+                        this.selectedDay = null;
+                        this.closeTooltip();
+                        this.hidePhaseInfo();
+                        this.clearStatHighlight();
+                        this.panX = 0;
+                        this.panY = 0;
+                        this.zoomLevel = 1.0;
+                        this.isDoubleTapZoomed = false;
+                        
+                        if (this.activeStatCard) {
+                            this.activeStatCard.classList.remove('active');
+                            this.activeStatCard = null;
+                        }
+                        
+                        if (this.isPanMode) {
+                            this.togglePanMode();
+                        }
+                        
+                        this.updateCycleInfo();
+                        this.renderCurrentCycle();
+                        
+                        this.el.cycleSvg.style.transform = `scale(${this.zoomLevel}) translateX(${-direction * 20}px)`;
+                        
+                        setTimeout(() => {
+                            this.el.cycleSvg.style.opacity = '1';
+                            this.updateTransform();
+                            this.isAnimating = false;
+                        }, 50);
+                    }, 200);
+                }
+            }
+
+            updateCycleInfo() {
+                const currentCycle = this.cycles[this.currentCycleIndex];
+                this.el.cycleTitle.textContent = currentCycle.title;
+                this.el.cycleDate.textContent = currentCycle.date;
+                
+                this.updateStatCards();
+            }
+
+            updateStatCards() {
+                const currentCycle = this.cycles[this.currentCycleIndex];
+                const currentTemp = currentCycle.data[this.currentActiveDay - 1].temperature;
+                this.el.currentTemp.textContent = `${currentTemp.toFixed(1)}°`;
+                
+                const daysToOvulation = 14 - this.currentActiveDay;
+                this.el.ovulationDays.textContent = Math.max(0, daysToOvulation);
+            }
+
+            getCurrentCycleData() {
+                return this.cycles[this.currentCycleIndex].data;
+            }
+
+            handleTouchStart(e) {
+                if (e.touches.length === 1) {
+                    this.touchStartX = e.touches[0].clientX;
+                    this.touchStartY = e.touches[0].clientY;
+                    this.touchStartTime = Date.now();
+                    
+                    if (this.isPanMode && this.zoomLevel > 1) {
+                        this.isDragging = true;
+                        this.lastPanX = e.touches[0].clientX;
+                        this.lastPanY = e.touches[0].clientY;
+                        this.el.visualizationContainer.classList.add('panning');
+                    }
+                } else if (e.touches.length === 2) {
+                    this.initialDistance = this.getDistance(e.touches[0], e.touches[1]);
+                    this.initialZoom = this.zoomLevel;
+                }
+            }
+
+            handleTouchMove(e) {
+                if (e.touches.length === 2 && this.initialDistance) {
+                    e.preventDefault();
+                    const currentDistance = this.getDistance(e.touches[0], e.touches[1]);
+                    const scale = currentDistance / this.initialDistance;
+                    const newZoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.initialZoom * scale));
+                    
+                    const threshold = this.isMobile ? 0.01 : 0.02;
+                    if (Math.abs(newZoom - this.zoomLevel) > threshold) {
+                        this.zoomLevel = Math.round(newZoom * 10) / 10;
+                        
+                        if (this.zoomLevel <= 1) {
+                            this.isDoubleTapZoomed = false;
+                        } else if (this.zoomLevel > 1.5) {
+                            this.isDoubleTapZoomed = true;
+                        }
+                        
+                        if (this.isMobile) {
+                            this.updateZoomMobile();
+                        } else {
+                            this.updateZoom();
+                        }
+                    }
+                } else if (e.touches.length === 1 && this.isDragging && this.isPanMode) {
+                    const deltaX = e.touches[0].clientX - this.lastPanX;
+                    const deltaY = e.touches[0].clientY - this.lastPanY;
+                    
+                    this.panX += deltaX;
+                    this.panY += deltaY;
+                    
+                    this.constrainPan();
+                    this.updateTransform();
+                    
+                    this.lastPanX = e.touches[0].clientX;
+                    this.lastPanY = e.touches[0].clientY;
+                }
+            }
+
+            handleTouchEnd(e) {
+                this.touchStartX = null;
+                this.touchStartY = null;
+                this.touchStartTime = null;
+                this.initialDistance = null;
+                
+                if (this.isDragging) {
+                    this.isDragging = false;
+                    this.el.visualizationContainer.classList.remove('panning');
+                } else if (e.changedTouches.length === 1) {
+                    this.handleDoubleTap(e);
+                }
+            }
+
+            getDistance(touch1, touch2) {
+                return Math.sqrt(
+                    Math.pow(touch2.clientX - touch1.clientX, 2) +
+                    Math.pow(touch2.clientY - touch1.clientY, 2)
+                );
+            }
+
+            zoomIn() {
+                const newZoom = Math.round((this.zoomLevel + 0.2) * 10) / 10;
+                this.zoomLevel = Math.min(this.maxZoom, newZoom);
+                
+                if (this.zoomLevel > 1.5) {
+                    this.isDoubleTapZoomed = true;
+                } else {
+                    this.isDoubleTapZoomed = false;
+                }
+                
+                this.updateZoom();
+            }
+
+            zoomOut() {
+                const newZoom = Math.round((this.zoomLevel - 0.2) * 10) / 10;
+                this.zoomLevel = Math.max(this.minZoom, newZoom);
+                
+                if (this.zoomLevel <= 1) {
+                    this.panX = 0;
+                    this.panY = 0;
+                    this.isDoubleTapZoomed = false;
+                }
+                
+                this.updateZoom();
+            }
+
+            handleDoubleClick(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.performDoubleTapZoom(e);
+            }
+
+            handleDoubleTap(e) {
+                const currentTime = Date.now();
+                const tapGap = currentTime - this.lastTapTime;
+                
+                if (tapGap < this.doubleTapThreshold && tapGap > 50) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const touch = e.changedTouches ? e.changedTouches[0] : e;
+                    this.performDoubleTapZoom({ 
+                        touches: e.changedTouches ? [touch] : null,
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+                    
+                    if (this.clickTimeout) {
+                        clearTimeout(this.clickTimeout);
+                        this.clickTimeout = null;
+                    }
+                } else {
+                    this.lastTapTime = currentTime;
+                }
+            }
+
+            performDoubleTapZoom(e) {
+                const rect = this.el.visualizationContainer.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                let clientX, clientY;
+                if (e.touches && e.touches[0]) {
+                    clientX = e.touches[0].clientX - rect.left;
+                    clientY = e.touches[0].clientY - rect.top;
+                } else {
+                    clientX = e.clientX - rect.left;
+                    clientY = e.clientY - rect.top;
+                }
+
+                if (this.isDoubleTapZoomed || this.zoomLevel > 1.2) {
+                    this.zoomLevel = 1.0;
+                    this.panX = 0;
+                    this.panY = 0;
+                    this.isDoubleTapZoomed = false;
+                    if (this.isPanMode) {
+                        this.togglePanMode();
+                    }
+                } else {
+                    this.zoomLevel = this.doubleTapZoomLevel;
+                    this.isDoubleTapZoomed = true;
+                    
+                    const zoomCenterX = (clientX - centerX) * (this.doubleTapZoomLevel - 1) * 0.6;
+                    const zoomCenterY = (clientY - centerY) * (this.doubleTapZoomLevel - 1) * 0.6;
+                    
+                    this.panX = -zoomCenterX;
+                    this.panY = -zoomCenterY;
+                    
+                    if (!this.isPanMode) {
+                        this.togglePanMode();
+                    }
+                }
+                
+                this.el.cycleSvg.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                this.updateZoom();
+                
+                setTimeout(() => {
+                    this.el.cycleSvg.style.transition = '';
+                }, 300);
+            }
+
+            updateZoom() {
+                this.el.zoomLevel.textContent = Math.round(this.zoomLevel * 100) + '%';
+                this.constrainPan();
+                this.updateTransform();
+                
+                this.el.zoomIn.disabled = this.zoomLevel >= this.maxZoom;
+                this.el.zoomOut.disabled = this.zoomLevel <= this.minZoom;
+                
+                if (currentAnimationFrame) {
+                    cancelAnimationFrame(currentAnimationFrame);
+                }
+                currentAnimationFrame = requestAnimationFrame(() => {
+                    this.renderCurrentCycle();
+                });
+            }
+
+            updateZoomMobile() {
+                this.el.zoomLevel.textContent = Math.round(this.zoomLevel * 100) + '%';
+                this.constrainPan();
+                this.updateTransform();
+                
+                this.el.zoomIn.disabled = this.zoomLevel >= this.maxZoom;
+                this.el.zoomOut.disabled = this.zoomLevel <= this.minZoom;
+            }
+
+            handleWheel(e) {
+                const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                const newZoom = Math.round((this.zoomLevel + delta) * 10) / 10;
+                
+                if (newZoom >= this.minZoom && newZoom <= this.maxZoom) {
+                    this.zoomLevel = newZoom;
+                    
+                    if (this.zoomLevel <= 1) {
+                        this.isDoubleTapZoomed = false;
+                    } else if (this.zoomLevel > 1.5) {
+                        this.isDoubleTapZoomed = true;
+                    }
+                    
+                    this.updateZoom();
+                }
+            }
+
+            togglePhaseInfo(phase) {
+                if (this.phaseActive && this.currentPhase === phase) {
+                    this.hidePhaseInfo();
+                } else {
+                    this.showPhaseInfo(phase);
+                }
+            }
+
+            showPhaseInfo(phase) {
+                this.phaseActive = true;
+                this.currentPhase = phase;
+                
+                document.querySelectorAll('.phase-label').forEach(label => {
+                    label.classList.remove('active');
+                });
+                
+                if (phase === 'ovulation') {
+                    this.el.ovulationLabel.classList.add('active');
+                    this.el.phaseTooltipTitle.innerHTML = '🥚 Ovulation Phase';
+                    this.el.phaseTooltipContent.textContent = 'The fertile window where the egg is released from the ovary. This is the best time for conception.';
+                    this.el.phaseExtraInfo.innerHTML = '<strong>Signs:</strong> Increased cervical mucus, slight temperature rise, ovulation pain.';
+                    
+                    this.el.phaseDays.innerHTML = '';
+                    this.ovulationDays.forEach(day => {
+                        const daySpan = document.createElement('span');
+                        daySpan.className = 'phase-day';
+                        daySpan.textContent = `Day ${day}`;
+                        this.el.phaseDays.appendChild(daySpan);
+                    });
+                    
+                    this.highlightPhaseDays(this.ovulationDays);
+                } else if (phase === 'menstruation') {
+                    this.el.menstruationLabel.classList.add('active');
+                    this.el.phaseTooltipTitle.innerHTML = '🩸 Menstruation Phase';
+                    this.el.phaseTooltipContent.textContent = 'The monthly shedding of the uterine lining. This marks the beginning of a new cycle.';
+                    this.el.phaseExtraInfo.innerHTML = '<strong>Signs:</strong> Menstrual bleeding, cramps, fatigue, mood changes.';
+                    
+                    this.el.phaseDays.innerHTML = '';
+                    this.menstruationDays.forEach(day => {
+                        const daySpan = document.createElement('span');
+                        daySpan.className = 'phase-day';
+                        daySpan.textContent = `Day ${day}`;
+                        this.el.phaseDays.appendChild(daySpan);
+                    });
+                    
+                    this.highlightPhaseDays(this.menstruationDays);
+                }
+                
+                this.el.phaseTooltip.classList.remove('animating');
+                void this.el.phaseTooltip.offsetWidth;
+                
+                this.el.phaseTooltip.style.display = 'block';
+                this.el.phaseBackdrop.style.display = 'block';
+                
+                requestAnimationFrame(() => {
+                    this.el.phaseTooltip.classList.add('animating');
+                    this.el.phaseBackdrop.classList.add('visible');
+                });
+                
+                setTimeout(() => {
+                    this.el.phaseTooltip.classList.remove('animating');
+                    this.el.phaseTooltip.style.opacity = '1';
+                }, 400);
+                
+                if (this.selectedDay) {
+                    this.closeTooltip();
+                }
+            }
+
+            hidePhaseInfo() {
+                this.phaseActive = false;
+                this.currentPhase = null;
+                
+                document.querySelectorAll('.phase-label').forEach(label => {
+                    label.classList.remove('active');
+                });
+                
+                this.el.phaseTooltip.classList.remove('animating');
+                this.el.phaseBackdrop.classList.remove('visible');
+                
+                this.el.phaseTooltip.style.transition = 'opacity 0.3s ease';
+                this.el.phaseTooltip.style.opacity = '0';
+                
+                setTimeout(() => {
+                    this.el.phaseTooltip.style.display = 'none';
+                    this.el.phaseBackdrop.style.display = 'none';
+                    this.el.phaseTooltip.style.transition = '';
+                }, 300);
+                
+                this.removeHighlights();
+            }
+
+            highlightPhaseDays(days) {
+                days.forEach(day => {
+                    const group = this.el.dayMarkers.querySelector(`g[data-day="${day}"]`);
+                    if (group) {
+                        group.classList.add('highlighted-day');
+                    }
+                });
+            }
+
+            removeHighlights() {
+                const highlightedDays = this.el.dayMarkers.querySelectorAll('.highlighted-day');
+                highlightedDays.forEach(group => {
+                    group.classList.remove('highlighted-day');
+                });
+            }
+
+            handleClickOutside(e) {
+                if (this.phaseActive && 
+                    !e.target.closest('#phaseTooltip') && 
+                    !e.target.closest('.phase-label')) {
+                    this.hidePhaseInfo();
+                }
+                
+                if (this.selectedDay && 
+                    !e.target.closest('#tooltip') && 
+                    !e.target.closest('g[data-day]') &&
+                    !e.target.hasAttribute('data-day') &&
+                    !e.target.closest('.day-marker') &&
+                    !this.customizeModalVisible) {
+                    this.closeTooltip();
+                }
+
+                if (this.el.analysisModal.style.display !== 'none' &&
+                    e.target === this.el.analysisModal) {
+                    this.hideAnalysisModal();
+                }
+
+                if (this.el.customizeModal.style.display !== 'none' &&
+                    e.target === this.el.customizeModal) {
+                    this.hideCustomizeModal();
+                }
+            }
+
+            swipeLeft() {
+                this.legendIndex = (this.legendIndex + 1) % this.legendCategories.length;
+                this.updateLegend();
+            }
+
+            swipeRight() {
+                this.legendIndex = (this.legendIndex - 1 + this.legendCategories.length) % this.legendCategories.length;
+                this.updateLegend();
+            }
+
+            getDayPosition(day) {
+                const angle = ((day - 1) / 28) * 2 * Math.PI - Math.PI / 2;
+                const x = 140 + 95 * Math.cos(angle);
+                const y = 140 + 95 * Math.sin(angle);
+                return { x, y, angle };
+            }
+
+            getTemperatureColor(temp) {
+                if (temp < 97.5) return '#4facfe';
+                if (temp < 98) return '#10b981';
+                if (temp < 98.5) return '#f59e0b';
+                return '#ef4444';
+            }
+
+            getFlowColor(flow) {
+                switch (flow) {
+                    case 'heavy': return '#dc2626';
+                    case 'medium': return '#ea580c';
+                    case 'light': return '#f59e0b';
+                    default: return '#6b7280';
+                }
+            }
+
+            getMoodColor(mood) {
+                switch (mood) {
+                    case 'great': return '#8b5cf6';
+                    case 'good': return '#06b6d4';
+                    case 'low': return '#64748b';
+                    default: return '#f97316';
+                }
+            }
+
+            showHoverTooltip(day, event) {
+                if (hoverTimeout) {
+                    clearTimeout(hoverTimeout);
+                }
+
+                const cycleData = this.getCurrentCycleData();
+                const dayData = cycleData[day - 1];
+                if (!dayData) return;
+
+                this.el.hoverTooltipTitle.textContent = `Day ${day}`;
+                this.el.hoverTooltipContent.innerHTML = `
+                    <div class="hover-tooltip-row">
+                        <span class="hover-tooltip-label">🌡️ Temp</span>
+                        <span class="hover-tooltip-value">${dayData.temperature.toFixed(1)}°F</span>
+                    </div>
+                    <div class="hover-tooltip-row">
+                        <span class="hover-tooltip-label">💧 Flow</span>
+                        <span class="hover-tooltip-value">${dayData.flow}</span>
+                    </div>
+                    <div class="hover-tooltip-row">
+                        <span class="hover-tooltip-label">😊 Mood</span>
+                        <span class="hover-tooltip-value">${dayData.mood}</span>
+                    </div>
+                    <div class="hover-tooltip-row">
+                        <span class="hover-tooltip-label">⚡ Energy</span>
+                        <span class="hover-tooltip-value">${dayData.energy}</span>
+                    </div>
+                `;
+
+                const rect = this.el.visualizationContainer.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left;
+                const mouseY = event.clientY - rect.top;
+
+                const isMobile = window.innerWidth <= 480;
+                const tooltipWidth = isMobile ? 120 : 140;
+                const tooltipHeight = isMobile ? 70 : 85;
+
+                let tooltipX = mouseX + 10;
+                let tooltipY = mouseY - 10;
+
+                if (tooltipX + tooltipWidth > rect.width) {
+                    tooltipX = mouseX - tooltipWidth - 10;
+                }
+
+                if (tooltipY + tooltipHeight > rect.height) {
+                    tooltipY = mouseY - tooltipHeight - 10;
+                }
+
+                if (tooltipX < 5) {
+                    tooltipX = 5;
+                }
+
+                if (tooltipY < 5) {
+                    tooltipY = mouseY + 15;
+                }
+
+                if (tooltipY + tooltipHeight > rect.height - 5) {
+                    tooltipY = rect.height - tooltipHeight - 5;
+                }
+
+                this.el.hoverTooltip.style.left = tooltipX + 'px';
+                this.el.hoverTooltip.style.top = tooltipY + 'px';
+                this.el.hoverTooltip.classList.add('visible');
+                this.hoverTooltipVisible = true;
+            }
+
+            hideHoverTooltip() {
+                if (hoverTimeout) {
+                    clearTimeout(hoverTimeout);
+                }
+                
+                hoverTimeout = setTimeout(() => {
+                    this.el.hoverTooltip.classList.remove('visible');
+                    this.hoverTooltipVisible = false;
+                }, 100);
+            }
+
+            showTooltip(day) {
+                const cycleData = this.getCurrentCycleData();
+                const dayData = cycleData[day - 1];
+                if (!dayData) return;
+                
+                this.el.tooltipTitle.textContent = `Day ${day}`;
+                
+                this.el.tooltipContent.innerHTML = `
+                    <div class="tooltip-row">
+                        <span class="tooltip-label">🌡️ Temp</span>
+                        <span class="tooltip-value">${dayData.temperature.toFixed(1)}°F</span>
+                    </div>
+                    <div class="tooltip-row">
+                        <span class="tooltip-label">💧 Flow</span>
+                        <span class="tooltip-value">${dayData.flow}</span>
+                    </div>
+                    <div class="tooltip-row">
+                        <span class="tooltip-label">😊 Mood</span>
+                        <span class="tooltip-value">${dayData.mood}</span>
+                    </div>
+                    <div class="tooltip-row">
+                        <span class="tooltip-label">⚡ Energy</span>
+                        <span class="tooltip-value">${dayData.energy}</span>
+                    </div>
+                    ${dayData.symptoms && dayData.symptoms.length > 0 ?`
+                        <div class="symptoms-section">
+                            <span class="symptoms-label">Symptoms</span>
+                            <div class="symptoms-tags">
+                                ${dayData.symptoms.map(symptom => 
+                                    `<span class="symptom-tag">${symptom.replace('_', ' ')}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
+
+                this.el.tooltip.style.display = 'block';
+            }
+
+            closeTooltip() {
+                this.selectedDay = null;
+                this.el.tooltip.style.display = 'none';
+            }
+
+            renderCurrentCycle() {
+                if (this.isMobile) {
+                    this.renderDayMarkers();
+                    this.renderTemperaturePath();
+                } else {
+                    optimizedRaf(() => {
+                        this.renderDayMarkers();
+                        this.renderTemperaturePath();
+                    });
+                }
+            }
+
+            renderDayMarkers() {
+                const fragment = document.createDocumentFragment();
+                const cycleData = this.getCurrentCycleData();
+                
+                this.el.dayMarkers.innerHTML = '';
+                
+                cycleData.forEach((data, index) => {
+                    const pos = this.getDayPosition(data.day);
+                    
+                    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    group.classList.add('day-marker');
+                    group.setAttribute('data-day', data.day);
+                    
+                    if (data.day === this.currentActiveDay) {
+                        group.classList.add('current-day');
+                        
+                        const haloRing = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        haloRing.classList.add('halo-ring');
+                        haloRing.setAttribute('cx', pos.x);
+                        haloRing.setAttribute('cy', pos.y);
+                        haloRing.setAttribute('r', '20');
+                        haloRing.setAttribute('fill', 'url(#haloGradient)');
+                        haloRing.setAttribute('opacity', '0');
+                        group.appendChild(haloRing);
+                    }
+                    
+                    const baseSize = this.isMobile ? 12 : Math.min(14, 10 + (this.zoomLevel - 1) * 3);
+                    
+                    const flowCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    flowCircle.setAttribute('cx', pos.x);
+                    flowCircle.setAttribute('cy', pos.y);
+                    flowCircle.setAttribute('r', baseSize);
+                    flowCircle.setAttribute('fill', this.getFlowColor(data.flow));
+                    flowCircle.setAttribute('opacity', '0.9');
+                    flowCircle.setAttribute('data-day', data.day);
+                    
+                    if (!this.isMobile) {
+                        flowCircle.style.filter = 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))';
+                    }
+                    
+                    const tempCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    tempCircle.setAttribute('cx', pos.x);
+                    tempCircle.setAttribute('cy', pos.y);
+                    tempCircle.setAttribute('r', baseSize * 0.6);
+                    tempCircle.setAttribute('fill', this.getTemperatureColor(data.temperature));
+                    tempCircle.setAttribute('data-day', data.day);
+                    
+                    if (!this.isMobile) {
+                        tempCircle.style.filter = 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))';
+                    }
+                    
+                    const dayText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    dayText.setAttribute('x', pos.x);
+                    dayText.setAttribute('y', pos.y + 2);
+                    dayText.setAttribute('text-anchor', 'middle');
+                    dayText.setAttribute('fill', 'white');
+                    dayText.setAttribute('font-size', this.isMobile ? 8 : Math.min(10, baseSize * 0.7));
+                    dayText.setAttribute('font-weight', '900');
+                    dayText.setAttribute('stroke', 'rgba(0, 0, 0, 0.5)');
+                    dayText.setAttribute('stroke-width', this.isMobile ? '0.2' : '0.3');
+                    dayText.style.paintOrder = 'stroke fill';
+                    dayText.style.pointerEvents = 'none';
+                    dayText.textContent = data.day;
+                    
+                    if (!this.isMobile) {
+                        dayText.style.filter = 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))';
+                    }
+                    
+                    const moodCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    moodCircle.setAttribute('cx', pos.x + baseSize * 0.6);
+                    moodCircle.setAttribute('cy', pos.y - baseSize * 0.6);
+                    moodCircle.setAttribute('r', this.isMobile ? '2' : '3');
+                    moodCircle.setAttribute('fill', this.getMoodColor(data.mood));
+                    moodCircle.setAttribute('opacity', '0.8');
+                    moodCircle.setAttribute('data-day', data.day);
+                    
+                    if (!this.isMobile) {
+                        moodCircle.style.filter = 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2))';
+                    }
+                    
+                    group.appendChild(flowCircle);
+                    group.appendChild(tempCircle);
+                    group.appendChild(dayText);
+                    group.appendChild(moodCircle);
+                    
+                    if (!this.isMobile) {
+                        group.addEventListener('mouseenter', (e) => {
+                            if (!this.hoverTooltipVisible) {
+                                this.showHoverTooltip(data.day, e);
+                            }
+                        });
+                        
+                        group.addEventListener('mouseleave', () => {
+                            this.hideHoverTooltip();
+                        });
+                        
+                        group.addEventListener('mousemove', (e) => {
+                            if (this.hoverTooltipVisible) {
+                                this.showHoverTooltip(data.day, e);
+                            }
+                        });
+                    }
+                    
+                    group.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        
+                        if (this.clickTimeout) {
+                            clearTimeout(this.clickTimeout);
+                            this.clickTimeout = null;
+                        }
+                        
+                        this.clickTimeout = setTimeout(() => {
+                            if (!this.isMobile) this.hideHoverTooltip();
+                            this.selectedDay = data.day;
+                            this.showTooltip(data.day);
+                            this.clickTimeout = null;
+                        }, this.doubleTapThreshold + 50);
+                    });
+                    
+                    group.style.opacity = '0';
+                    group.style.transform = 'scale(0)';
+                    
+                    const delay = this.isMobile ? index * 3 : index * 6;
+                    setTimeout(() => {
+                        group.style.transition = this.isMobile ? 'all 0.1s ease' : 'all 0.2s ease';
+                        group.style.opacity = '1';
+                        group.style.transform = 'scale(1)';
+                    }, delay);
+                    
+                    fragment.appendChild(group);
+                });
+
+                this.el.dayMarkers.appendChild(fragment);
+                this.updateSelectedDayBlinking();
+            }
+
+            renderTemperaturePath() {
+                const cycleData = this.getCurrentCycleData();
+                const pathData = cycleData.map((data, i) => {
+                    const tempRadius = 95 * (0.7 + (data.temperature - 97) / 3 * 0.3);
+                    const angle = (data.day - 1) / 28 * 2 * Math.PI - Math.PI / 2;
+                    const tempX = 140 + tempRadius * Math.cos(angle);
+                    const tempY = 140 + tempRadius * Math.sin(angle);
+                    return `${i === 0 ? 'M' : 'L'} ${tempX} ${tempY}`;
+                }).join(' ') + ' Z';
+                
+                this.el.temperaturePath.setAttribute('d', pathData);
+            }
+
+            updateLegend() {
+                const category = this.legendCategories[this.legendIndex];
+                this.el.legendTitle.textContent = category.title;
+                
+                this.el.legendDots.innerHTML = '';
+                const dotsFragment = document.createDocumentFragment();
+                this.legendCategories.forEach((_, i) => {
+                    const dot = document.createElement('div');
+                    dot.className = `legend-dot ${i === this.legendIndex ? 'active' : 'inactive'}`;
+                    dotsFragment.appendChild(dot);
+                });
+                this.el.legendDots.appendChild(dotsFragment);
+                
+                this.el.legendSlider.innerHTML = '';
+                const sliderFragment = document.createDocumentFragment();
+                this.legendCategories.forEach((cat) => {
+                    const page = document.createElement('div');
+                    page.className = 'legend-page';
+                    
+                    cat.items.forEach((item) => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'legend-item';
+                        itemDiv.dataset.filter = item.filter;
+                        
+                        const icon = document.createElement('div');
+                        icon.className = 'legend-icon';
+                        icon.style.background = item.color;
+                        
+                        const label = document.createElement('span');
+                        label.className = 'legend-label';
+                        label.textContent = item.label;
+                        
+                        itemDiv.appendChild(icon);
+                        itemDiv.appendChild(label);
+                        
+                        itemDiv.addEventListener('click', () => this.handleLegendItemClick(item));
+                        
+                        page.appendChild(itemDiv);
+                    });
+                    
+                    sliderFragment.appendChild(page);
+                });
+                this.el.legendSlider.appendChild(sliderFragment);
+                
+                this.el.legendSlider.style.transform = `translateX(-${this.legendIndex * 100}%)`;
+            }
+
+            handleLegendItemClick(item) {
+                const legendItems = document.querySelectorAll('.legend-item');
+                
+                if (this.activeLegendFilter === item.filter) {
+                    this.activeLegendFilter = null;
+                    legendItems.forEach(el => el.classList.remove('active'));
+                    this.clearLegendFilter();
+                } else {
+                    this.activeLegendFilter = item.filter;
+                    legendItems.forEach(el => {
+                        if (el.dataset.filter === item.filter) {
+                            el.classList.add('active');
+                        } else {
+                            el.classList.remove('active');
+                        }
+                    });
+                    this.applyLegendFilter(item.filter);
+                }
+            }
+
+            applyLegendFilter(filter) {
+                const dayMarkers = this.el.dayMarkers.querySelectorAll('g[data-day]');
+                const currentData = this.getCurrentCycleData();
+                
+                dayMarkers.forEach((marker, index) => {
+                    const dayData = currentData[index];
+                    let shouldHighlight = false;
+                    
+                    switch(filter) {
+                        case 'heavy':
+                        case 'medium':
+                        case 'light':
+                        case 'none':
+                            shouldHighlight = dayData.flow === filter;
+                            break;
+                        case 'low-temp':
+                            shouldHighlight = dayData.temperature < 97.5;
+                            break;
+                        case 'normal-temp':
+                            shouldHighlight = dayData.temperature >= 97.5 && dayData.temperature < 98;
+                            break;
+                        case 'elevated-temp':
+                            shouldHighlight = dayData.temperature >= 98 && dayData.temperature < 98.5;
+                            break;
+                        case 'high-temp':
+                            shouldHighlight = dayData.temperature >= 98.5;
+                            break;
+                        case 'great-mood':
+                        case 'good-mood':
+                            shouldHighlight = dayData.mood === filter.replace('-mood', '');
+                            break;
+                        case 'high-energy':
+                        case 'low-energy':
+                            shouldHighlight = dayData.energy === filter.replace('-energy', '');
+                            break;
+                    }
+                    
+                    if (shouldHighlight) {
+                        marker.classList.add('highlighted-day');
+                        marker.style.opacity = '1';
+                    } else {
+                        marker.classList.remove('highlighted-day');
+                        marker.style.opacity = '0.3';
+                    }
+                });
+            }
+
+            clearLegendFilter() {
+                const dayMarkers = this.el.dayMarkers.querySelectorAll('g[data-day]');
+                dayMarkers.forEach(marker => {
+                    marker.classList.remove('highlighted-day');
+                    marker.style.opacity = '1';
+                });
+            }
+
+            render() {
+                this.el.visualizationContainer.style.touchAction = 'pan-y pinch-zoom';
+                this.updateCycleInfo();
+                this.renderCurrentCycle();
+                this.updateLegend();
+                this.updateZoom();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            hideLoadingScreen();
+            new OptimizedCycleTracker();
+        });
+    </script>
+</body>
+</html>
