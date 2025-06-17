@@ -1940,19 +1940,7 @@
                     </button>
                 </div>
 
-                <div class="zoom-controls">
-                    <button class="zoom-btn" id="zoomOut">−</button>
-                    <span class="zoom-level" id="zoomLevel">100%</span>
-                    <button class="zoom-btn" id="zoomIn">+</button>
-                    <button class="pan-btn" id="panToggle">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                            <path d="M12,2A2,2 0 0,1 14,4V8H16L12,12L8,8H10V4A2,2 0 0,1 12,2Z"/>
-                            <path d="M22,12A2,2 0 0,1 20,14H16V16L12,12L16,8V10H20A2,2 0 0,1 22,12Z"/>
-                            <path d="M12,22A2,2 0 0,1 10,20V16H8L12,12L16,16H14V20A2,2 0 0,1 12,22Z"/>
-                            <path d="M2,12A2,2 0 0,1 4,10H8V8L12,12L8,16V14H4A2,2 0 0,1 2,12Z"/>
-                        </svg>
-                    </button>
-                </div>
+                <div class="zoom-controls"></div>
             </div>
 
             <div class="visualization-container glass-card" id="visualizationContainer">
@@ -2316,9 +2304,9 @@
 
             initializeState() {
                 this.isMobile = window.innerWidth <= 480;
-                this.zoomLevel = 1.0;
-                this.minZoom = 0.8;
-                this.maxZoom = 3.0;
+                this.zoomLevel = 1.6;
+                this.minZoom = 1.6;
+                this.maxZoom = 1.6;
                 this.panX = 0;
                 this.panY = 0;
                 this.isPanMode = false;
@@ -2359,10 +2347,10 @@
 
             cacheDOMElements() {
                 this.el = {
-                    zoomIn: document.getElementById('zoomIn'),
-                    zoomOut: document.getElementById('zoomOut'),
-                    panToggle: document.getElementById('panToggle'),
-                    zoomLevel: document.getElementById('zoomLevel'),
+                    zoomIn: null,
+                    zoomOut: null,
+                    panToggle: null,
+                    zoomLevel: null,
                     cycleSvg: document.getElementById('cycleSvg'),
                     dayMarkers: document.getElementById('dayMarkers'),
                     temperaturePath: document.getElementById('temperaturePath'),
@@ -2522,10 +2510,6 @@
             }
 
             bindEvents() {
-                this.el.zoomIn.addEventListener('click', () => this.zoomIn());
-                this.el.zoomOut.addEventListener('click', () => this.zoomOut());
-                this.el.panToggle.addEventListener('click', () => this.togglePanMode());
-                
                 this.el.legendDots.addEventListener('click', (e) => {
                     if (e.target.classList.contains('legend-dot')) {
                         const index = Array.from(e.target.parentNode.children).indexOf(e.target);
@@ -2550,18 +2534,7 @@
                     }
                 });
 
-                this.el.visualizationContainer.addEventListener('wheel', (e) => {
-                    if (this.isPanMode) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        return;
-                    }
-                    
-                    if (e.ctrlKey || e.metaKey) {
-                        e.preventDefault();
-                        this.handleWheel(e);
-                    }
-                }, { passive: false });
+
 
                 this.bindMouseEvents();
                 this.bindTouchEvents();
@@ -2573,7 +2546,6 @@
                 this.el.visualizationContainer.addEventListener('mousemove', (e) => this.handleMouseMove(e));
                 this.el.visualizationContainer.addEventListener('mouseup', (e) => this.handleMouseUp(e));
                 this.el.visualizationContainer.addEventListener('mouseleave', (e) => this.handleMouseUp(e));
-                this.el.visualizationContainer.addEventListener('dblclick', (e) => this.handleDoubleClick(e));
             }
 
             bindTouchEvents() {
@@ -2672,25 +2644,6 @@
                     }
                 }
                 
-                if (e.key === '+' || e.key === '=') {
-                    e.preventDefault();
-                    this.zoomIn();
-                }
-                if (e.key === '-' || e.key === '_') {
-                    e.preventDefault();
-                    this.zoomOut();
-                }
-                if (e.key === '0') {
-                    e.preventDefault();
-                    this.zoomLevel = 1.0;
-                    this.panX = 0;
-                    this.panY = 0;
-                    this.isDoubleTapZoomed = false;
-                    if (this.isPanMode) {
-                        this.togglePanMode();
-                    }
-                    this.updateZoom();
-                }
             }
 
             togglePanMode() {
@@ -2704,7 +2657,7 @@
                     this.el.visualizationContainer.addEventListener('touchmove', this.preventVisualizationScroll, { passive: false });
                     this.el.visualizationContainer.addEventListener('wheel', this.preventVisualizationScroll, { passive: false });
                 } else {
-                    this.el.visualizationContainer.style.touchAction = 'pan-y pinch-zoom';
+                    this.el.visualizationContainer.style.touchAction = 'pan-y';
                     this.el.visualizationContainer.style.overflow = 'hidden';
                     this.el.visualizationContainer.removeEventListener('touchmove', this.preventVisualizationScroll);
                     this.el.visualizationContainer.removeEventListener('wheel', this.preventVisualizationScroll);
@@ -3113,7 +3066,7 @@
                         this.clearStatHighlight();
                         this.panX = 0;
                         this.panY = 0;
-                        this.zoomLevel = 1.0;
+                        this.zoomLevel = 1.6;
                         this.isDoubleTapZoomed = false;
                         
                         if (this.activeStatCard) {
@@ -3172,39 +3125,14 @@
                         this.lastPanY = e.touches[0].clientY;
                         this.el.visualizationContainer.classList.add('panning');
                     }
-                } else if (e.touches.length === 2) {
-                    this.initialDistance = this.getDistance(e.touches[0], e.touches[1]);
-                    this.initialZoom = this.zoomLevel;
                 }
             }
 
             handleTouchMove(e) {
-                if (e.touches.length === 2 && this.initialDistance) {
-                    e.preventDefault();
-                    const currentDistance = this.getDistance(e.touches[0], e.touches[1]);
-                    const scale = currentDistance / this.initialDistance;
-                    const newZoom = Math.max(this.minZoom, Math.min(this.maxZoom, this.initialZoom * scale));
-                    
-                    const threshold = this.isMobile ? 0.01 : 0.02;
-                    if (Math.abs(newZoom - this.zoomLevel) > threshold) {
-                        this.zoomLevel = Math.round(newZoom * 10) / 10;
-                        
-                        if (this.zoomLevel <= 1) {
-                            this.isDoubleTapZoomed = false;
-                        } else if (this.zoomLevel > 1.5) {
-                            this.isDoubleTapZoomed = true;
-                        }
-                        
-                        if (this.isMobile) {
-                            this.updateZoomMobile();
-                        } else {
-                            this.updateZoom();
-                        }
-                    }
-                } else if (e.touches.length === 1 && this.isDragging && this.isPanMode) {
+                if (e.touches.length === 1 && this.isDragging && this.isPanMode) {
                     const deltaX = e.touches[0].clientX - this.lastPanX;
                     const deltaY = e.touches[0].clientY - this.lastPanY;
-                    
+
                     this.panX += deltaX;
                     this.panY += deltaY;
                     
@@ -3225,8 +3153,6 @@
                 if (this.isDragging) {
                     this.isDragging = false;
                     this.el.visualizationContainer.classList.remove('panning');
-                } else if (e.changedTouches.length === 1) {
-                    this.handleDoubleTap(e);
                 }
             }
 
@@ -3238,114 +3164,28 @@
             }
 
             zoomIn() {
-                const newZoom = Math.round((this.zoomLevel + 0.2) * 10) / 10;
-                this.zoomLevel = Math.min(this.maxZoom, newZoom);
-                
-                if (this.zoomLevel > 1.5) {
-                    this.isDoubleTapZoomed = true;
-                } else {
-                    this.isDoubleTapZoomed = false;
-                }
-                
-                this.updateZoom();
+                return;
             }
 
             zoomOut() {
-                const newZoom = Math.round((this.zoomLevel - 0.2) * 10) / 10;
-                this.zoomLevel = Math.max(this.minZoom, newZoom);
-                
-                if (this.zoomLevel <= 1) {
-                    this.panX = 0;
-                    this.panY = 0;
-                    this.isDoubleTapZoomed = false;
-                }
-                
-                this.updateZoom();
+                return;
             }
 
             handleDoubleClick(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                this.performDoubleTapZoom(e);
             }
 
             handleDoubleTap(e) {
-                const currentTime = Date.now();
-                const tapGap = currentTime - this.lastTapTime;
-                
-                if (tapGap < this.doubleTapThreshold && tapGap > 50) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const touch = e.changedTouches ? e.changedTouches[0] : e;
-                    this.performDoubleTapZoom({ 
-                        touches: e.changedTouches ? [touch] : null,
-                        clientX: touch.clientX,
-                        clientY: touch.clientY
-                    });
-                    
-                    if (this.clickTimeout) {
-                        clearTimeout(this.clickTimeout);
-                        this.clickTimeout = null;
-                    }
-                } else {
-                    this.lastTapTime = currentTime;
-                }
             }
 
             performDoubleTapZoom(e) {
-                const rect = this.el.visualizationContainer.getBoundingClientRect();
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                let clientX, clientY;
-                if (e.touches && e.touches[0]) {
-                    clientX = e.touches[0].clientX - rect.left;
-                    clientY = e.touches[0].clientY - rect.top;
-                } else {
-                    clientX = e.clientX - rect.left;
-                    clientY = e.clientY - rect.top;
-                }
-
-                if (this.isDoubleTapZoomed || this.zoomLevel > 1.2) {
-                    this.zoomLevel = 1.0;
-                    this.panX = 0;
-                    this.panY = 0;
-                    this.isDoubleTapZoomed = false;
-                    if (this.isPanMode) {
-                        this.togglePanMode();
-                    }
-                } else {
-                    this.zoomLevel = this.doubleTapZoomLevel;
-                    this.isDoubleTapZoomed = true;
-                    
-                    const zoomCenterX = (clientX - centerX) * (this.doubleTapZoomLevel - 1) * 0.6;
-                    const zoomCenterY = (clientY - centerY) * (this.doubleTapZoomLevel - 1) * 0.6;
-                    
-                    this.panX = -zoomCenterX;
-                    this.panY = -zoomCenterY;
-                    
-                    if (!this.isPanMode) {
-                        this.togglePanMode();
-                    }
-                }
-                
-                this.el.cycleSvg.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-                this.updateZoom();
-                
-                setTimeout(() => {
-                    this.el.cycleSvg.style.transition = '';
-                }, 300);
             }
 
             updateZoom() {
-                this.el.zoomLevel.textContent = Math.round(this.zoomLevel * 100) + '%';
                 this.constrainPan();
                 this.updateTransform();
-                
-                this.el.zoomIn.disabled = this.zoomLevel >= this.maxZoom;
-                this.el.zoomOut.disabled = this.zoomLevel <= this.minZoom;
-                
+
                 if (currentAnimationFrame) {
                     cancelAnimationFrame(currentAnimationFrame);
                 }
@@ -3355,29 +3195,12 @@
             }
 
             updateZoomMobile() {
-                this.el.zoomLevel.textContent = Math.round(this.zoomLevel * 100) + '%';
                 this.constrainPan();
                 this.updateTransform();
-                
-                this.el.zoomIn.disabled = this.zoomLevel >= this.maxZoom;
-                this.el.zoomOut.disabled = this.zoomLevel <= this.minZoom;
             }
 
             handleWheel(e) {
-                const delta = e.deltaY > 0 ? -0.1 : 0.1;
-                const newZoom = Math.round((this.zoomLevel + delta) * 10) / 10;
-                
-                if (newZoom >= this.minZoom && newZoom <= this.maxZoom) {
-                    this.zoomLevel = newZoom;
-                    
-                    if (this.zoomLevel <= 1) {
-                        this.isDoubleTapZoomed = false;
-                    } else if (this.zoomLevel > 1.5) {
-                        this.isDoubleTapZoomed = true;
-                    }
-                    
-                    this.updateZoom();
-                }
+                e.preventDefault();
             }
 
             togglePhaseInfo(phase) {
@@ -3962,7 +3785,7 @@
             }
 
             render() {
-                this.el.visualizationContainer.style.touchAction = 'pan-y pinch-zoom';
+                this.el.visualizationContainer.style.touchAction = 'pan-y';
                 this.updateCycleInfo();
                 this.renderCurrentCycle();
                 this.updateLegend();
