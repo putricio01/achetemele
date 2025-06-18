@@ -1870,6 +1870,36 @@
         .will-change-transform {
             will-change: transform;
         }
+         /* Desktop layout tweaks */
+         @media (min-width: 768px) {
+            .container {
+                max-width: 1200px;
+            }
+
+            .header {
+                width: 100vw;
+                margin-left: calc(50% - 50vw);
+                margin-right: calc(50% - 50vw);
+            }
+
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-areas:
+                    "header header"
+                    "nav vis"
+                    "legend vis"
+                    "stats controls";
+                gap: 1rem;
+            }
+
+            .header { grid-area: header; }
+            .cycle-navigation { grid-area: nav; }
+            .visualization-container { grid-area: vis; }
+            .legend-container { grid-area: legend; }
+            .stats-grid { grid-area: stats; }
+            .controls-section { grid-area: controls; }
+        }
     </style>
 </head>
 <body>
@@ -2996,19 +3026,20 @@
                         ${content}
                     </div>
                 `;
-                
+
                 document.body.appendChild(modal);
-                
+
+              
                 const closeBtn = modal.querySelector('.detail-close');
                 const closeModal = () => {
                     modal.remove();
                 };
-                
+
                 closeBtn.addEventListener('click', closeModal);
                 modal.addEventListener('click', (e) => {
                     if (e.target === modal) closeModal();
                 });
-                
+
                 document.addEventListener('keydown', function escapeHandler(e) {
                     if (e.key === 'Escape') {
                         closeModal();
@@ -3016,6 +3047,7 @@
                     }
                 });
             }
+                        
 
             highlightStatData(statType) {
                 this.clearStatHighlight();
