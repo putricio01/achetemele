@@ -546,6 +546,7 @@
             padding: 1rem;
             z-index: 10;
             animation: slideUpScale 0.3s ease;
+            transform-origin: bottom center;
         }
 
         .hover-tooltip {
@@ -1665,6 +1666,7 @@
                 left: 0.75rem;
                 right: 0.75rem;
                 padding: 0.75rem;
+                transform: scale(0.7);
             }
 
             .tooltip-row {
@@ -2358,6 +2360,7 @@
                 this.customizeModalVisible = false;
                 this.currentActiveDay = 13;
                 this.hoverTooltipVisible = false;
+                this.tooltipScale = this.isMobile ? 0.7 : 1;
                 
                 this.touchStartX = null;
                 this.touchStartY = null;
@@ -2585,6 +2588,10 @@
                 this.el.visualizationContainer.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
                 this.el.visualizationContainer.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
                 this.el.visualizationContainer.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+
+                this.el.tooltip.addEventListener('touchstart', (e) => this.handleTooltipTouchStart(e), { passive: false });
+                this.el.tooltip.addEventListener('touchmove', (e) => this.handleTooltipTouchMove(e), { passive: false });
+                this.el.tooltip.addEventListener('touchend', (e) => this.handleTooltipTouchEnd(e));
             }
 
             bindGlobalEvents() {
@@ -3206,6 +3213,32 @@
                 return;
             }
 
+            handleTooltipTouchStart(e) {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    this.pinchingTooltip = true;
+                    this.initialDistance = this.getDistance(e.touches[0], e.touches[1]);
+                    this.initialTooltipScale = this.tooltipScale;
+                }
+            }
+
+            handleTooltipTouchMove(e) {
+                if (this.pinchingTooltip && e.touches.length === 2) {
+                    e.preventDefault();
+                    const distance = this.getDistance(e.touches[0], e.touches[1]);
+                    const scaleChange = distance / this.initialDistance;
+                    this.tooltipScale = Math.max(0.7, Math.min(1, this.initialTooltipScale * scaleChange));
+                    this.el.tooltip.style.transform = `scale(${this.tooltipScale})`;
+                }
+            }
+
+            handleTooltipTouchEnd(e) {
+                if (e.touches.length < 2) {
+                    this.pinchingTooltip = false;
+                    this.initialDistance = null;
+                }
+            }
+
             handleDoubleClick(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -3496,6 +3529,12 @@
                 const cycleData = this.getCurrentCycleData();
                 const dayData = cycleData[day - 1];
                 if (!dayData) return;
+
+                if (this.isMobile) {
+                    this.tooltipScale = 0.7;
+                } else {
+                    this.tooltipScale = 1;
+                }
                 
                 this.el.tooltipTitle.textContent = `Day ${day}`;
                 
@@ -3529,11 +3568,13 @@
                 `;
 
                 this.el.tooltip.style.display = 'block';
+                this.el.tooltip.style.transform = `scale(${this.tooltipScale})`;
             }
 
             closeTooltip() {
                 this.selectedDay = null;
                 this.el.tooltip.style.display = 'none';
+                this.tooltipScale = this.isMobile ? 0.7 : 1;
             }
 
             renderCurrentCycle() {
