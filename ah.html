@@ -6,587 +6,85 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Hex Conquest - Strategic Territory Control</title>
-    <style>
-        :root {
-            --primary-blue: #4A90E2;
-            --primary-red: #E74C3C;
-            --success-green: #27AE60;
-            --warning-yellow: #F1C40F;
-            --neutral-dark: #2C3E50;
-            --background-primary: #0f0f1e;
-            --background-secondary: #1a1a2e;
-            --surface-glass: rgba(255, 255, 255, 0.08);
-            --surface-glass-strong: rgba(255, 255, 255, 0.12);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.8);
-            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.12);
-            --shadow-strong: 0 16px 64px rgba(0, 0, 0, 0.24);
-            --border-subtle: rgba(255, 255, 255, 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-            -webkit-touch-callout: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, var(--background-secondary) 0%, var(--background-primary) 100%);
-            color: var(--text-primary);
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            font-feature-settings: 'kern' 1;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        #gameContainer {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #gameCanvas {
-            flex: 1;
-            touch-action: none;
-            cursor: grab;
-            background: radial-gradient(ellipse at center, rgba(74, 144, 226, 0.05) 0%, transparent 70%);
-        }
-
-        #gameCanvas:active {
-            cursor: grabbing;
-        }
-
-        #ui {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 16px;
-            background: linear-gradient(180deg, 
-                rgba(15, 15, 30, 0.95) 0%, 
-                rgba(15, 15, 30, 0.8) 60%,
-                transparent 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 100;
-            border-bottom: 1px solid var(--border-subtle);
-            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-
-        .ui-section {
-            margin-bottom: 12px;
-        }
-
-        .resources {
-            display: flex;
-            justify-content: space-around;
-            gap: 12px;
-        }
-
-        .resource {
-            display: flex;
-            align-items: center;
-            background: var(--surface-glass);
-            padding: 12px 18px;
-            border-radius: 24px;
-            border: 1px solid var(--border-subtle);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            flex: 1;
-            min-width: 0;
-            transition: all 0.2s ease;
-        }
-
-        .resource:hover {
-            background: var(--surface-glass-strong);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-soft);
-        }
-
-        .resource-icon {
-            width: 28px;
-            height: 28px;
-            margin-right: 10px;
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            flex-shrink: 0;
-        }
-
-        .gold { 
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        }
-        
-        .units { 
-            background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
-        }
-
-        .resource-value {
-            font-size: 16px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .turn-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .current-player {
-            font-weight: 700;
-            font-size: 16px;
-            padding: 12px 20px;
-            border-radius: 20px;
-            background: var(--surface-glass);
-            border: 1px solid var(--border-subtle);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            flex-shrink: 0;
-        }
-
-        .player1 { 
-            background: linear-gradient(135deg, var(--primary-blue) 0%, #357ABD 100%);
-            box-shadow: 0 4px 20px rgba(74, 144, 226, 0.3);
-            border-color: rgba(74, 144, 226, 0.5);
-        }
-        
-        .player2 { 
-            background: linear-gradient(135deg, var(--primary-red) 0%, #C0392B 100%);
-            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3);
-            border-color: rgba(231, 76, 60, 0.5);
-        }
-
-        .timer-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .timer {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--warning-yellow);
-            text-shadow: 0 2px 8px rgba(241, 196, 15, 0.4);
-            line-height: 1;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .timer.urgent {
-            animation: pulse 1s infinite;
-            color: var(--primary-red);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .timer-label {
-            font-size: 11px;
-            opacity: 0.7;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        #endTurnBtn {
-            background: linear-gradient(135deg, var(--success-green) 0%, #229954 100%);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 24px;
-            font-weight: 700;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 16px rgba(39, 174, 96, 0.3);
-            transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
-            cursor: pointer;
-            border: 1px solid rgba(39, 174, 96, 0.3);
-            flex-shrink: 0;
-        }
-
-        #endTurnBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(39, 174, 96, 0.4);
-        }
-
-        #endTurnBtn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
-        }
-
-        .territory-counter {
-            position: absolute;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 15, 30, 0.95);
-            padding: 16px 24px;
-            border-radius: 32px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex;
-            gap: 24px;
-            align-items: center;
-            box-shadow: var(--shadow-strong);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .territory-stat {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .territory-color {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .territory-percentage {
-            font-size: 18px;
-            font-weight: 700;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .territory-progress {
-            width: 60px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-left: 8px;
-        }
-
-        .territory-progress-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-
-        .player1-progress {
-            background: linear-gradient(90deg, var(--primary-blue), #357ABD);
-        }
-
-        .player2-progress {
-            background: linear-gradient(90deg, var(--primary-red), #C0392B);
-        }
-
-        #victoryScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(15, 15, 30, 0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 300;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .victory-content {
-            background: linear-gradient(135deg, var(--neutral-dark) 0%, #34495E 100%);
-            padding: 48px 32px;
-            border-radius: 24px;
-            text-align: center;
-            box-shadow: var(--shadow-strong);
-            max-width: 90%;
-            border: 1px solid var(--border-subtle);
-            animation: slideUp 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .victory-title {
-            font-size: 42px;
-            font-weight: 900;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
-        }
-
-        .victory-message {
-            font-size: 18px;
-            margin-bottom: 32px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .play-again-btn {
-            background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%);
-            border: none;
-            color: white;
-            padding: 16px 32px;
-            border-radius: 28px;
-            font-size: 16px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 6px 24px rgba(52, 152, 219, 0.3);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid rgba(52, 152, 219, 0.3);
-        }
-
-        .play-again-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(52, 152, 219, 0.4);
-        }
-
-        .game-controls {
-            position: absolute;
-            top: 50%;
-            right: 16px;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 150;
-        }
-
-        .control-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(15, 15, 30, 0.9);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            font-weight: 700;
-            font-size: 18px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        .control-btn:hover {
-            background: rgba(15, 15, 30, 1);
-            border-color: rgba(255, 255, 255, 0.4);
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--background-primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 400;
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .spinner {
-            width: 64px;
-            height: 64px;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-left: 4px solid var(--primary-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 480px) {
-            .resources {
-                gap: 8px;
-            }
-            
-            .resource {
-                padding: 10px 12px;
-            }
-            
-            .territory-counter {
-                bottom: 16px;
-                padding: 12px 20px;
-                gap: 16px;
-            }
-            
-            .victory-content {
-                padding: 32px 24px;
-            }
-            
-            .victory-title {
-                font-size: 32px;
-            }
-        }
-
-        @media (max-height: 600px) {
-            #ui {
-                padding: 12px;
-            }
-            
-            .ui-section {
-                margin-bottom: 8px;
-            }
-        }
-
-        .touch-feedback {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-            pointer-events: none;
-            transform: translate(-50%, -50%) scale(0);
-            transition: transform 0.2s ease;
-            z-index: 1000;
-        }
-
-        .touch-feedback.active {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .hex-coord-display {
-            position: absolute;
-            top: 100px;
-            right: 16px;
-            background: var(--surface-glass);
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-family: monospace;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border-subtle);
-        }
-
-        .hex-coord-display.visible {
-            opacity: 1;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="loading-overlay" id="loadingOverlay">
+<body class="font-sans text-white bg-gray-900 fixed inset-0 overflow-hidden">
+    <div class="loading-overlay fixed inset-0 bg-gray-900 flex items-center justify-center transition-opacity z-40" id="loadingOverlay">
         <div>
-            <div class="spinner"></div>
-            <div style="margin-top: 20px; font-size: 18px; color: var(--text-secondary);">Loading Hex Conquest...</div>
+            <div class="spinner w-16 h-16 border-4 border-white/10 border-l-blue-500 rounded-full animate-spin"></div>
+            <div class="mt-5 text-lg text-gray-300">Loading Hex Conquest...</div>
         </div>
     </div>
 
-    <div id="gameContainer">
-        <canvas id="gameCanvas"></canvas>
+    <div id="gameContainer" class="relative flex flex-col w-screen h-screen overflow-hidden">
+        <canvas id="gameCanvas" class="flex-1 touch-none cursor-grab"></canvas>
         
-        <div id="ui">
-            <div class="ui-section">
-                <div class="resources">
-                    <div class="resource">
-                        <div class="resource-icon gold"></div>
-                        <div class="resource-value">
+        <div id="ui" class="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-gray-900/95 via-gray-900/80 to-transparent backdrop-blur border-b border-white/10 z-20">
+            <div class="ui-section mb-3">
+                <div class="resources flex justify-around gap-3">
+                    <div class="resource flex items-center bg-white/10 p-3 rounded-3xl border border-white/10 backdrop-blur flex-1 transition">
+                        <div class="resource-icon w-7 h-7 rounded-full mr-2 flex-shrink-0 bg-gradient-to-br from-yellow-400 to-orange-500"></div>
+                        <div class="resource-value font-semibold text-base">
                             <span id="goldCount">10</span>
                         </div>
                     </div>
-                    <div class="resource">
-                        <div class="resource-icon units"></div>
-                        <div class="resource-value">
+                    <div class="resource flex items-center bg-white/10 p-3 rounded-3xl border border-white/10 backdrop-blur flex-1 transition">
+                        <div class="resource-icon w-7 h-7 rounded-full mr-2 flex-shrink-0 bg-gradient-to-br from-cyan-400 to-blue-600"></div>
+                        <div class="resource-value font-semibold text-base">
                             <span id="unitCount">3/10</span>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="ui-section">
-                <div class="turn-info">
-                    <div class="current-player" id="currentPlayer">Player 1</div>
-                    <div class="timer-container">
-                        <div class="timer" id="timer">30</div>
-                        <div class="timer-label">seconds</div>
+            <div class="ui-section mb-3">
+                <div class="turn-info flex justify-between items-center gap-3">
+                    <div class="current-player px-5 py-2 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 shadow text-sm font-bold uppercase flex-shrink-0" id="currentPlayer">Player 1</div>
+                    <div class="timer-container flex flex-col items-center gap-1">
+                        <div class="timer text-3xl font-extrabold text-yellow-400 leading-none font-mono" id="timer">30</div>
+                        <div class="timer-label text-xs opacity-70 uppercase tracking-wider">seconds</div>
                     </div>
-                    <button id="endTurnBtn">End Turn</button>
+                    <button id="endTurnBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full text-sm font-bold uppercase shadow transition">End Turn</button>
                 </div>
             </div>
         </div>
         
-        <div class="game-controls">
-            <div class="control-btn" id="zoomInBtn" title="Zoom In">+</div>
-            <div class="control-btn" id="zoomOutBtn" title="Zoom Out">−</div>
-            <div class="control-btn" id="centerBtn" title="Center View">⌂</div>
+        <div class="game-controls absolute top-1/2 right-4 -translate-y-1/2 flex flex-col gap-3 z-10">
+            <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow" id="zoomInBtn" title="Zoom In">+</div>
+            <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow" id="zoomOutBtn" title="Zoom Out">−</div>
+            <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow" id="centerBtn" title="Center View">⌂</div>
         </div>
         
-        <div class="territory-counter">
-            <div class="territory-stat">
-                <div class="territory-color" style="background: linear-gradient(135deg, var(--primary-blue), #357ABD);"></div>
-                <span class="territory-percentage" id="player1Territory">25%</span>
-                <div class="territory-progress">
-                    <div class="territory-progress-fill player1-progress" id="player1Progress"></div>
+        <div class="territory-counter absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 bg-opacity-95 px-4 py-4 rounded-2xl flex gap-6 items-center border-2 border-white/20 backdrop-blur shadow-lg">
+            <div class="territory-stat flex items-center gap-2">
+                <div class="territory-color bg-gradient-to-br from-blue-500 to-blue-700 w-6 h-6 rounded-full border-2 border-white/20 shadow"></div>
+                <span class="territory-percentage text-lg font-bold" id="player1Territory">25%</span>
+                <div class="territory-progress w-16 h-1.5 bg-white/10 rounded-full overflow-hidden ml-2">
+                    <div class="territory-progress-fill player1-progress h-full rounded-full transition-all bg-blue-500" id="player1Progress"></div>
                 </div>
             </div>
-            <div class="territory-stat">
-                <div class="territory-color" style="background: linear-gradient(135deg, var(--primary-red), #C0392B);"></div>
-                <span class="territory-percentage" id="player2Territory">25%</span>
-                <div class="territory-progress">
-                    <div class="territory-progress-fill player2-progress" id="player2Progress"></div>
+            <div class="territory-stat flex items-center gap-2">
+                <div class="territory-color bg-gradient-to-br from-red-500 to-red-700 w-6 h-6 rounded-full border-2 border-white/20 shadow"></div>
+                <span class="territory-percentage text-lg font-bold" id="player2Territory">25%</span>
+                <div class="territory-progress w-16 h-1.5 bg-white/10 rounded-full overflow-hidden ml-2">
+                    <div class="territory-progress-fill player2-progress h-full rounded-full transition-all bg-red-500" id="player2Progress"></div>
                 </div>
             </div>
         </div>
         
-        <div class="hex-coord-display" id="hexCoordDisplay">
+        <div class="hex-coord-display absolute top-24 right-4 bg-white/10 px-3 py-2 rounded-md text-xs font-mono opacity-0 transition-opacity backdrop-blur border border-white/10" id="hexCoordDisplay">
             Hex: (0, 0)
         </div>
         
-        <div id="victoryScreen">
-            <div class="victory-content">
-                <h2 class="victory-title">Victory!</h2>
-                <p class="victory-message" id="victoryMessage">Player 1 has conquered the battlefield!</p>
-                <button class="play-again-btn" onclick="location.reload()">Play Again</button>
+        <div id="victoryScreen" class="fixed inset-0 bg-gray-900 bg-opacity-95 hidden items-center justify-center z-30 backdrop-blur">
+            <div class="victory-content bg-gray-700 p-12 rounded-xl text-center shadow max-w-[90%] border border-white/10">
+                <h2 class="victory-title text-4xl font-extrabold mb-4 text-yellow-400">Victory!</h2>
+                <p class="victory-message mb-8 text-gray-200" id="victoryMessage">Player 1 has conquered the battlefield!</p>
+                <button class="play-again-btn bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full text-lg font-bold uppercase shadow transition border border-blue-300/50" onclick="location.reload()">Play Again</button>
             </div>
         </div>
         
-        <div class="touch-feedback" id="touchFeedback"></div>
+        <div class="touch-feedback fixed w-10 h-10 rounded-full bg-white/30 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 transition" id="touchFeedback"></div>
     </div>
 
     <script>
@@ -1188,9 +686,9 @@
                     timerElement.textContent = this.timeRemaining;
                     
                     if (this.timeRemaining <= 10) {
-                        timerElement.classList.add('urgent');
+                        timerElement.classList.add('animate-pulse', 'text-red-600');
                     } else {
-                        timerElement.classList.remove('urgent');
+                        timerElement.classList.remove('animate-pulse', 'text-red-600');
                     }
                     
                     if (this.timeRemaining <= 0) {
@@ -1208,7 +706,12 @@
                 
                 const playerDiv = document.getElementById('currentPlayer');
                 playerDiv.textContent = `Player ${this.currentPlayer}`;
-                playerDiv.className = `current-player player${this.currentPlayer}`;
+                playerDiv.classList.remove('player1', 'player2', 'from-blue-500', 'to-blue-700', 'from-red-500', 'to-red-700');
+                if (this.currentPlayer === 1) {
+                    playerDiv.classList.add('from-blue-500', 'to-blue-700');
+                } else {
+                    playerDiv.classList.add('from-red-500', 'to-red-700');
+                }
                 
                 this.updateTerritoryDisplay();
             }
@@ -1249,10 +752,11 @@
                 const winnerTerritories = this.hexGrid.filter(hex => hex.owner === winner).length;
                 const percentage = Math.round(winnerTerritories / total * 100);
                 
-                document.getElementById('victoryMessage').innerHTML = 
+                document.getElementById('victoryMessage').innerHTML =
                     `Player ${winner} has conquered the battlefield!<br>
-                     <span style="font-size: 14px; opacity: 0.8;">Controlled ${percentage}% of territories</span>`;
-                document.getElementById('victoryScreen').style.display = 'flex';
+                     <span class="text-sm opacity-80">Controlled ${percentage}% of territories</span>`;
+                const victoryScreen = document.getElementById('victoryScreen');
+                victoryScreen.classList.remove('hidden');
             }
             
             draw(currentTime) {
