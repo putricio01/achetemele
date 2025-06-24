@@ -84,7 +84,7 @@
             Hex: (0, 0)
         </div>
         
-        <div id="victoryScreen" class="fixed inset-0 bg-gray-900 bg-opacity-95 hidden items-center justify-center z-30 backdrop-blur">
+        <div id="victoryScreen" class="fixed inset-0 bg-gray-900 bg-opacity-95 hidden flex items-center justify-center z-30 backdrop-blur">
             <div class="victory-content bg-gray-700 p-12 rounded-xl text-center shadow max-w-[90%] border border-white/10">
                 <h2 class="victory-title text-4xl font-extrabold mb-4 text-yellow-400">Victory!</h2>
                 <p class="victory-message mb-8 text-gray-200" id="victoryMessage">Player 1 has conquered the battlefield!</p>
@@ -100,7 +100,7 @@
         </div>
         
 
-        <div id="instructionsOverlay" class="fixed inset-0 bg-gray-900 bg-opacity-95 hidden items-center justify-center z-30 backdrop-blur">
+        <div id="instructionsOverlay" class="fixed inset-0 bg-gray-900 bg-opacity-95 hidden flex items-center justify-center z-30 backdrop-blur">
             <div class="bg-gray-700 p-8 rounded-xl text-center max-w-[90%] border border-white/10">
                 <h2 class="text-2xl font-bold mb-4 text-yellow-400">How to Play</h2>
                 <p class="text-gray-200 mb-6">Every hex you step on converts to your color.<br>Control 70% of the board to win.</p>
@@ -153,6 +153,8 @@
                 this.animationFrame = null;
                 this.lastFrameTime = 0;
                 this.hexAnimations = new Map();
+                this.timeoutIds = [];
+                this.eventListeners = [];
 
                 this.vsCPU = vsCPU;
                 
@@ -167,7 +169,7 @@
                 this.startGameLoop();
                 this.startTurnTimer();
                 
-                setTimeout(() => {
+                this.setGameTimeout(() => {
                     document.getElementById('loadingOverlay').classList.add('hidden');
                     this.isGameReady = true;
                 }, 1000);
@@ -273,29 +275,29 @@
             }
             
             setupEventListeners() {
-                this.canvas.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: false });
-                this.canvas.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
-                this.canvas.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: false });
-                
-                this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
-                this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-                this.canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e));
-                this.canvas.addEventListener('wheel', (e) => this.handleWheel(e), { passive: false });
-                
-                document.getElementById('endTurnBtn').addEventListener('click', () => this.endTurn());
-                document.getElementById('zoomInBtn').addEventListener('click', () => this.zoomIn());
-                document.getElementById('zoomOutBtn').addEventListener('click', () => this.zoomOut());
-                document.getElementById('centerBtn').addEventListener('click', () => this.centerView());
-                document.getElementById('helpBtn').addEventListener('click', () => {
+                this.addTrackedEventListener(this.canvas, 'touchstart', (e) => this.handleTouchStart(e), { passive: false });
+                this.addTrackedEventListener(this.canvas, 'touchmove', (e) => this.handleTouchMove(e), { passive: false });
+                this.addTrackedEventListener(this.canvas, 'touchend', (e) => this.handleTouchEnd(e), { passive: false });
+
+                this.addTrackedEventListener(this.canvas, 'mousedown', (e) => this.handleMouseDown(e));
+                this.addTrackedEventListener(this.canvas, 'mousemove', (e) => this.handleMouseMove(e));
+                this.addTrackedEventListener(this.canvas, 'mouseup', (e) => this.handleMouseUp(e));
+                this.addTrackedEventListener(this.canvas, 'wheel', (e) => this.handleWheel(e), { passive: false });
+
+                this.addTrackedEventListener(document.getElementById('endTurnBtn'), 'click', () => this.endTurn());
+                this.addTrackedEventListener(document.getElementById('zoomInBtn'), 'click', () => this.zoomIn());
+                this.addTrackedEventListener(document.getElementById('zoomOutBtn'), 'click', () => this.zoomOut());
+                this.addTrackedEventListener(document.getElementById('centerBtn'), 'click', () => this.centerView());
+                this.addTrackedEventListener(document.getElementById('helpBtn'), 'click', () => {
                     document.getElementById('instructionsOverlay').classList.remove('hidden');
                 });
-                document.getElementById('closeInstructionsBtn').addEventListener('click', () => {
+                this.addTrackedEventListener(document.getElementById('closeInstructionsBtn'), 'click', () => {
                     document.getElementById('instructionsOverlay').classList.add('hidden');
                 });
-                
-                document.addEventListener('keydown', (e) => {
+
+                this.addTrackedEventListener(document, 'keydown', (e) => {
                     if (!this.isGameReady) return;
-                    
+
                     switch(e.code) {
                         case 'Space':
                             e.preventDefault();
@@ -322,7 +324,7 @@
                 feedback.style.top = y + 'px';
                 feedback.classList.add('active');
                 
-                setTimeout(() => {
+                this.setGameTimeout(() => {
                     feedback.classList.remove('active');
                 }, 200);
             }
@@ -555,11 +557,30 @@
                     duration
                 });
                 
-                setTimeout(() => {
+                this.setGameTimeout(() => {
                     this.hexAnimations.delete(hex);
                 }, duration);
             }
-            
+
+            setGameTimeout(callback, delay) {
+                const id = setTimeout(() => {
+                    callback();
+                    this.timeoutIds = this.timeoutIds.filter(t => t !== id);
+                }, delay);
+                this.timeoutIds.push(id);
+                return id;
+            }
+
+            clearGameTimeouts() {
+                this.timeoutIds.forEach(id => clearTimeout(id));
+                this.timeoutIds = [];
+            }
+
+            addTrackedEventListener(target, type, handler, options) {
+                target.addEventListener(type, handler, options);
+                this.eventListeners.push({ target, type, handler, options });
+            }
+
             getHexAtPoint(x, y) {
                 const rect = this.canvas.getBoundingClientRect();
                 const canvasX = x - rect.left;
@@ -697,7 +718,7 @@
                
                 if (this.vsCPU && this.currentPlayer === 2) {
                     this.showCpuTurnNotification();
-                    setTimeout(() => this.playEnhancedAI(), 800);
+                    this.setGameTimeout(() => this.playEnhancedAI(), 800);
                 } else {
                     this.hideCpuTurnNotification();
                 }
@@ -734,7 +755,7 @@
                     }
                 }
                 
-                setTimeout(() => this.endTurn(), 1200);
+                this.setGameTimeout(() => this.endTurn(), 1200);
             }
             
             startTurnTimer() {
@@ -1125,6 +1146,11 @@
                 if (this.timerInterval) {
                     clearInterval(this.timerInterval);
                 }
+                this.clearGameTimeouts();
+                this.eventListeners.forEach(({ target, type, handler, options }) => {
+                    target.removeEventListener(type, handler, options);
+                });
+                this.eventListeners = [];
             }
         }
         
