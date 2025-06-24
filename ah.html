@@ -9,12 +9,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="font-sans text-white bg-gray-900 min-h-[100dvh] overflow-hidden">
-    <div class="loading-overlay fixed inset-0 bg-gray-900 flex items-center justify-center transition-opacity z-40" id="loadingOverlay">
-        <div>
-            <div class="spinner w-16 h-16 border-4 border-white/10 border-l-blue-500 rounded-full animate-spin"></div>
-            <div class="mt-5 text-lg text-gray-300">Loading Hex Conquest...</div>
-        </div>
+    <div id="startMenu" class="fixed inset-0 bg-gray-900 flex flex-col items-center justify-center z-50">
+        <h1 class="text-4xl font-extrabold mb-8">Hex Conquest</h1>
+        <button id="vsCpuBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full mb-4">1 vs CPU</button>
+        <button id="vsPlayerBtn" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full">1 vs 1</button>
     </div>
+    <div id="loadingOverlay" class="fixed inset-0 z-40 flex items-center justify-center bg-gray-900 transition-opacity">
+        <div class="flex flex-col items-center">
+          <div class="w-16 h-16 border-4 border-white/10 border-l-blue-500 rounded-full animate-spin"></div>
+          <p class="mt-5 text-lg text-gray-300">Loading Hex Conquest...</p>
+        </div>
+      </div>
+      
 
     <div id="gameContainer" class="relative flex flex-col w-screen h-[100dvh] overflow-hidden">
         <canvas id="gameCanvas" class="flex-1 touch-none cursor-grab"></canvas>
@@ -23,15 +29,15 @@
             <div class="ui-section mb-3">
                 <div class="resources flex justify-around gap-3">
                     <div class="resource flex items-center bg-white/10 p-3 rounded-3xl border border-white/10 backdrop-blur flex-1 transition">
-                        <div class="resource-icon w-7 h-7 rounded-full mr-2 flex-shrink-0 bg-gradient-to-br from-yellow-400 to-orange-500"></div>
+                        <div class="resource-icon w-7 h-7 rounded-full mr-2 flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-700"></div>
                         <div class="resource-value font-semibold text-base">
-                            <span id="goldCount">10</span>
+                            <span id="blueHexCount">0</span>
                         </div>
                     </div>
                     <div class="resource flex items-center bg-white/10 p-3 rounded-3xl border border-white/10 backdrop-blur flex-1 transition">
-                        <div class="resource-icon w-7 h-7 rounded-full mr-2 flex-shrink-0 bg-gradient-to-br from-cyan-400 to-blue-600"></div>
+                        <div class="resource-icon w-7 h-7 rounded-full mr-2 flex-shrink-0 bg-gradient-to-br from-red-500 to-red-700"></div>
                         <div class="resource-value font-semibold text-base">
-                            <span id="unitCount">3/10</span>
+                            <span id="redHexCount">0</span>
                         </div>
                     </div>
                 </div>
@@ -53,6 +59,7 @@
             <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow hidden md:flex" id="zoomInBtn" title="Zoom In">+</div>
             <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow hidden md:flex" id="zoomOutBtn" title="Zoom Out">−</div>
             <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow" id="centerBtn" title="Center View">⌂</div>
+            <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow" id="helpBtn" title="Instructions">?</div>
             
         </div>
         
@@ -85,14 +92,28 @@
             </div>
         </div>
 
-      
+        <div id="cpuTurnNotification" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden items-center justify-center z-30">
+            <div class="bg-gray-700 p-6 rounded-xl text-center border border-white/10 shadow">
+                <div class="text-xl font-bold mb-2">CPU Turn</div>
+                <div class="text-sm text-gray-300">Player 2 is thinking...</div>
+            </div>
+        </div>
         
+
+        <div id="instructionsOverlay" class="fixed inset-0 bg-gray-900 bg-opacity-95 hidden items-center justify-center z-30 backdrop-blur">
+            <div class="bg-gray-700 p-8 rounded-xl text-center max-w-[90%] border border-white/10">
+                <h2 class="text-2xl font-bold mb-4 text-yellow-400">How to Play</h2>
+                <p class="text-gray-200 mb-6">Every hex you step on converts to your color.<br>Control 70% of the board to win.</p>
+                <button id="closeInstructionsBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full font-bold uppercase shadow transition mt-2">Close</button>
+            </div>
+        </div>
+
         <div class="touch-feedback fixed w-10 h-10 rounded-full bg-white/30 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 transition" id="touchFeedback"></div>
     </div>
 
     <script>
         class EnhancedHexGame {
-            constructor() {
+            constructor(vsCPU = true) {
                 this.canvas = document.getElementById('gameCanvas');
                 this.ctx = this.canvas.getContext('2d');
                 
@@ -132,6 +153,8 @@
                 this.animationFrame = null;
                 this.lastFrameTime = 0;
                 this.hexAnimations = new Map();
+
+                this.vsCPU = vsCPU;
                 
                 this.init();
             }
@@ -263,6 +286,12 @@
                 document.getElementById('zoomInBtn').addEventListener('click', () => this.zoomIn());
                 document.getElementById('zoomOutBtn').addEventListener('click', () => this.zoomOut());
                 document.getElementById('centerBtn').addEventListener('click', () => this.centerView());
+                document.getElementById('helpBtn').addEventListener('click', () => {
+                    document.getElementById('instructionsOverlay').classList.remove('hidden');
+                });
+                document.getElementById('closeInstructionsBtn').addEventListener('click', () => {
+                    document.getElementById('instructionsOverlay').classList.add('hidden');
+                });
                 
                 document.addEventListener('keydown', (e) => {
                     if (!this.isGameReady) return;
@@ -351,8 +380,8 @@
                             const dx = touch.clientX - touchData.x;
                             const dy = touch.clientY - touchData.y;
 
-                            this.offsetX += dx;
-                            this.offsetY += dy;
+                            this.offsetX += dx / this.scale;
+                            this.offsetY += dy / this.scale;
 
                             touchData.x = touch.clientX;
                             touchData.y = touch.clientY;
@@ -447,8 +476,8 @@
                 }
                 
                 if (this.isPanning) {
-                    this.offsetX += e.clientX - this.panStart.x;
-                    this.offsetY += e.clientY - this.panStart.y;
+                    this.offsetX += (e.clientX - this.panStart.x) / this.scale;
+                    this.offsetY += (e.clientY - this.panStart.y) / this.scale;
                     this.panStart = { x: e.clientX, y: e.clientY };
                 }
             }
@@ -665,8 +694,12 @@
                 this.updateUI();
                 this.updateVisibility();
                 
-                if (this.currentPlayer === 2) {
+               
+                if (this.vsCPU && this.currentPlayer === 2) {
+                    this.showCpuTurnNotification();
                     setTimeout(() => this.playEnhancedAI(), 800);
+                } else {
+                    this.hideCpuTurnNotification();
                 }
             }
             
@@ -728,11 +761,11 @@
             }
             
             updateUI() {
-                const currentPlayerResources = this.resources[this.currentPlayer];
-                document.getElementById('goldCount').textContent = currentPlayerResources.gold;
-                
-                const unitCount = this.units.filter(u => u.owner === this.currentPlayer).length;
-                document.getElementById('unitCount').textContent = `${unitCount}/${currentPlayerResources.maxUnits}`;
+                const blueCount = this.hexGrid.filter(hex => hex.owner === 1).length;
+                const redCount = this.hexGrid.filter(hex => hex.owner === 2).length;
+
+                document.getElementById('blueHexCount').textContent = blueCount;
+                document.getElementById('redHexCount').textContent = redCount;
                 
                 const playerDiv = document.getElementById('currentPlayer');
                 playerDiv.textContent = `Player ${this.currentPlayer}`;
@@ -760,6 +793,13 @@
                 document.getElementById('player1Progress').style.width = `${player1Percentage}%`;
                 document.getElementById('player2Progress').style.width = `${player2Percentage}%`;
             }
+            showCpuTurnNotification() {
+                document.getElementById("cpuTurnNotification").classList.remove("hidden");
+            }
+
+            hideCpuTurnNotification() {
+                document.getElementById("cpuTurnNotification").classList.add("hidden");
+            }
             
             checkVictoryCondition() {
                 const total = this.hexGrid.length;
@@ -777,6 +817,7 @@
                 if (this.timerInterval) {
                     clearInterval(this.timerInterval);
                 }
+                this.hideCpuTurnNotification();
                 
                 const total = this.hexGrid.length;
                 const winnerTerritories = this.hexGrid.filter(hex => hex.owner === winner).length;
@@ -1088,10 +1129,26 @@
         }
         
         let game;
+
+        function startGame(vsCPU) {
+            if (game) {
+                game.destroy();
+            }
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+            game = new EnhancedHexGame(vsCPU);
+        }
         window.addEventListener('load', () => {
             game = new EnhancedHexGame();
         });
-        
+        const menu = document.getElementById('startMenu');
+            document.getElementById('vsCpuBtn').addEventListener('click', () => {
+                menu.classList.add('hidden');
+                startGame(true);
+            });
+            document.getElementById('vsPlayerBtn').addEventListener('click', () => {
+                menu.classList.add('hidden');
+                startGame(false);
+            });
         window.addEventListener('beforeunload', () => {
             if (game) {
                 game.destroy();
