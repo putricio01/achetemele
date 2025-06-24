@@ -8,7 +8,7 @@
     <title>Hex Conquest - Strategic Territory Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="font-sans text-white bg-gray-900 fixed inset-0 overflow-hidden">
+<body class="font-sans text-white bg-gray-900 min-h-[100dvh] overflow-hidden">
     <div class="loading-overlay fixed inset-0 bg-gray-900 flex items-center justify-center transition-opacity z-40" id="loadingOverlay">
         <div>
             <div class="spinner w-16 h-16 border-4 border-white/10 border-l-blue-500 rounded-full animate-spin"></div>
@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <div id="gameContainer" class="relative flex flex-col w-screen h-screen overflow-hidden">
+    <div id="gameContainer" class="relative flex flex-col w-screen h-[100dvh] overflow-hidden">
         <canvas id="gameCanvas" class="flex-1 touch-none cursor-grab"></canvas>
         
         <div id="ui" class="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-gray-900/95 via-gray-900/80 to-transparent backdrop-blur border-b border-white/10 z-20">
@@ -50,9 +50,10 @@
         </div>
         
         <div class="game-controls absolute top-1/2 right-4 -translate-y-1/2 flex flex-col gap-3 z-10">
-            <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow" id="zoomInBtn" title="Zoom In">+</div>
-            <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow" id="zoomOutBtn" title="Zoom Out">−</div>
+            <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow hidden md:flex" id="zoomInBtn" title="Zoom In">+</div>
+            <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow hidden md:flex" id="zoomOutBtn" title="Zoom Out">−</div>
             <div class="control-btn w-12 h-12 rounded-full bg-gray-900 bg-opacity-90 border-2 border-white/20 text-white flex items-center justify-center cursor-pointer transition backdrop-blur font-bold text-lg shadow" id="centerBtn" title="Center View">⌂</div>
+            
         </div>
         
         <div class="territory-counter absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 bg-opacity-95 px-4 py-4 rounded-2xl flex gap-6 items-center border-2 border-white/20 backdrop-blur shadow-lg">
@@ -83,6 +84,8 @@
                 <button class="play-again-btn bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full text-lg font-bold uppercase shadow transition border border-blue-300/50" onclick="location.reload()">Play Again</button>
             </div>
         </div>
+
+      
         
         <div class="touch-feedback fixed w-10 h-10 rounded-full bg-white/30 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 transition" id="touchFeedback"></div>
     </div>
@@ -111,6 +114,9 @@
                 this.selectedUnit = null;
                 this.selectedHex = null;
                 this.hoveredHex = null;
+
+                this.draggingUnit = null;
+                this.draggingPosition = null;
                 
                 this.resources = {
                     1: { gold: 10, maxUnits: 10 },
@@ -295,11 +301,11 @@
             handleTouchStart(e) {
                 e.preventDefault();
                 if (!this.isGameReady) return;
-                
+
                 if (e.touches.length === 1) {
                     const touch = e.touches[0];
                     this.showTouchFeedback(touch.clientX, touch.clientY);
-                    
+
                     this.touches[touch.identifier] = {
                         x: touch.clientX,
                         y: touch.clientY,
@@ -307,9 +313,15 @@
                         startY: touch.clientY,
                         startTime: Date.now()
                     };
-                    
+
                     const hex = this.getHexAtPoint(touch.clientX, touch.clientY);
-                    if (hex) {
+                    const unit = hex ? this.getUnitAt(hex.q, hex.r) : null;
+
+                    if (unit && unit.owner === this.currentPlayer && unit.moves > 0) {
+                        this.draggingUnit = unit;
+                        this.draggingPosition = { x: touch.clientX, y: touch.clientY };
+                        this.selectedUnit = unit;
+                    } else if (hex) {
                         this.handleHexInteraction(hex, touch.clientX, touch.clientY);
                     }
                 } else if (e.touches.length === 2) {
@@ -325,23 +337,29 @@
             handleTouchMove(e) {
                 e.preventDefault();
                 if (!this.isGameReady) return;
-                
+
                 if (e.touches.length === 1) {
                     const touch = e.touches[0];
                     const touchData = this.touches[touch.identifier];
-                    
+
                     if (touchData) {
-                        const dx = touch.clientX - touchData.x;
-                        const dy = touch.clientY - touchData.y;
-                        
-                        this.offsetX += dx;
-                        this.offsetY += dy;
-                        
-                        touchData.x = touch.clientX;
-                        touchData.y = touch.clientY;
-                        
-                        const hex = this.getHexAtPoint(touch.clientX, touch.clientY);
-                        this.hoveredHex = hex;
+                        if (this.draggingUnit) {
+                            this.draggingPosition = { x: touch.clientX, y: touch.clientY };
+                            const hex = this.getHexAtPoint(touch.clientX, touch.clientY);
+                            this.hoveredHex = hex;
+                        } else {
+                            const dx = touch.clientX - touchData.x;
+                            const dy = touch.clientY - touchData.y;
+
+                            this.offsetX += dx;
+                            this.offsetY += dy;
+
+                            touchData.x = touch.clientX;
+                            touchData.y = touch.clientY;
+
+                            const hex = this.getHexAtPoint(touch.clientX, touch.clientY);
+                            this.hoveredHex = hex;
+                        }
                     }
                 } else if (e.touches.length === 2) {
                     const touch1 = e.touches[0];
@@ -364,26 +382,38 @@
             handleTouchEnd(e) {
                 e.preventDefault();
                 if (!this.isGameReady) return;
-                
+
                 for (let i = 0; i < e.changedTouches.length; i++) {
                     const touch = e.changedTouches[i];
                     const touchData = this.touches[touch.identifier];
-                    
+
                     if (touchData) {
                         const duration = Date.now() - touchData.startTime;
                         const distance = Math.hypot(
                             touch.clientX - touchData.startX,
                             touch.clientY - touchData.startY
                         );
-                        
-                        if (duration < 300 && distance < 10) {
-                            const hex = this.getHexAtPoint(touch.clientX, touch.clientY);
+
+                        const hex = this.getHexAtPoint(touch.clientX, touch.clientY);
+
+                        if (this.draggingUnit) {
+                            if (distance >= 10) {
+                                if (hex && this.canMoveUnit(this.draggingUnit, hex)) {
+                                    this.moveUnit(this.draggingUnit, hex);
+                                    this.animateHex(hex, 'capture');
+                                }
+                            } else if (hex) {
+                                this.handleHexClick(hex);
+                            }
+                            this.draggingUnit = null;
+                            this.draggingPosition = null;
+                        } else if (duration < 300 && distance < 10) {
                             if (hex) {
                                 this.handleHexClick(hex);
                             }
                         }
                     }
-                    
+
                     delete this.touches[touch.identifier];
                 }
                 
@@ -789,10 +819,16 @@
                 this.drawMovementIndicators(centerX, centerY);
                 
                 this.units.forEach(unit => {
-                    const pixelPos = this.hexToPixel(unit.q, unit.r);
-                    const x = centerX + (pixelPos.x + this.offsetX) * this.scale;
-                    const y = centerY + (pixelPos.y + this.offsetY) * this.scale;
-                    
+                    let x, y;
+                    if (this.draggingUnit === unit && this.draggingPosition) {
+                        x = this.draggingPosition.x - this.canvas.getBoundingClientRect().left;
+                        y = this.draggingPosition.y - this.canvas.getBoundingClientRect().top;
+                    } else {
+                        const pixelPos = this.hexToPixel(unit.q, unit.r);
+                        x = centerX + (pixelPos.x + this.offsetX) * this.scale;
+                        y = centerY + (pixelPos.y + this.offsetY) * this.scale;
+                    }
+
                     this.drawEnhancedUnit(x, y, unit, currentTime);
                 });
                 
@@ -931,7 +967,7 @@
                         
                         this.ctx.save();
                         this.ctx.globalAlpha = 0.4;
-                        this.ctx.fillStyle = '#27AE60';
+                        this.ctx.fillStyle = '#2ECC71';
                         this.ctx.beginPath();
                         this.ctx.arc(x, y, this.hexSize * this.scale * 0.3, 0, Math.PI * 2);
                         this.ctx.fill();
@@ -978,14 +1014,14 @@
                 }
                 
                 if (unit.owner === this.currentPlayer && unit.moves > 0) {
-                    this.ctx.fillStyle = '#27AE60';
+                    this.ctx.fillStyle = '#2ECC71';
                     this.ctx.font = `bold ${Math.max(12, 14 * this.scale)}px sans-serif`;
                     this.ctx.textAlign = 'center';
                     this.ctx.textBaseline = 'middle';
                     
                     const textMetrics = this.ctx.measureText(unit.moves);
                     const bgSize = Math.max(textMetrics.width + 6, 20);
-                    this.ctx.fillStyle = 'rgba(39, 174, 96, 0.9)';
+                    this.ctx.fillStyle = 'rgba(46, 204, 113, 0.9)';
                     this.ctx.beginPath();
                     this.ctx.arc(x, y - size - 15, bgSize/2, 0, Math.PI * 2);
                     this.ctx.fill();
